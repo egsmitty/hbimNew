@@ -4,26 +4,67 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const navLinks = [
-  { label: "About", href: "/about" },
-  { label: "Africa", href: "/africa" },
-  { label: "Asia", href: "/asia" },
-  { label: "Give", href: "/give" },
+interface DropdownItem {
+  label: string;
+  href: string;
+}
+
+const navLinks: { label: string; href: string; dropdown?: DropdownItem[] }[] = [
+  {
+    label: "About",
+    href: "/about",
+    dropdown: [
+      { label: "Our Mission", href: "/about#mission" },
+      { label: "The Three E's", href: "/about#threeEs" },
+      { label: "Our Journey", href: "/about#timeline" },
+      { label: "Programs", href: "/about#programs" },
+      { label: "What We Believe", href: "/about#beliefs" },
+      { label: "Our Team", href: "/about#team" },
+    ],
+  },
+  {
+    label: "Africa",
+    href: "/africa",
+    dropdown: [
+      { label: "Overview", href: "/africa#overview" },
+      { label: "Interactive Map", href: "/africa#map" },
+      { label: "Eight Nations", href: "/africa#nations" },
+      { label: "Field Reports", href: "/africa#reports" },
+    ],
+  },
+  {
+    label: "Asia",
+    href: "/asia",
+    dropdown: [
+      { label: "Overview", href: "/asia#overview" },
+      { label: "Interactive Map", href: "/asia#map" },
+      { label: "Three Nations", href: "/asia#nations" },
+      { label: "Field Reports", href: "/asia#reports" },
+    ],
+  },
+  {
+    label: "Give",
+    href: "/give",
+    dropdown: [
+      { label: "How to Give", href: "/give#pathways" },
+      { label: "Give by Check", href: "/give#check" },
+      { label: "Donor Portal", href: "/give#trust" },
+    ],
+  },
   { label: "Contact", href: "/contact" },
 ];
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const isActive = (href: string) => pathname === href;
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   return (
     <header className="sticky top-0 z-50 bg-navy border-b border-white/10">
-      <div className="max-w-[1200px] mx-auto px-6 h-18 flex items-center justify-between gap-8" style={{ height: "72px" }}>
+      <div className="max-w-[1440px] mx-auto px-6 h-18 flex items-center justify-between gap-8" style={{ height: "72px" }}>
 
         {/* Logo lockup */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          {/* Cross emblem */}
           <div className="w-9 h-9 rounded-sm bg-gold/15 border border-gold/30 flex items-center justify-center group-hover:bg-gold/25 transition-colors">
             <svg viewBox="0 0 24 24" className="w-5 h-5 text-gold" fill="currentColor" aria-hidden="true">
               <rect x="10.5" y="3" width="3" height="18" rx="1" />
@@ -38,27 +79,60 @@ export default function Nav() {
 
         {/* Desktop links */}
         <nav className="hidden md:flex items-center gap-7" aria-label="Primary navigation">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              aria-current={isActive(link.href) ? "page" : undefined}
-              className={`font-body text-sm tracking-wide transition-colors relative pb-0.5 ${
-                isActive(link.href)
-                  ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gold after:rounded-full"
-                  : "text-white/65 hover:text-white"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.dropdown ? (
+              <div key={link.href} className="relative group">
+                <Link
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={`font-body text-sm tracking-wide transition-colors relative pb-0.5 flex items-center gap-1 ${
+                    isActive(link.href)
+                      ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gold after:rounded-full"
+                      : "text-white/65 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                  <svg className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
+                  </svg>
+                </Link>
+                {/* Dropdown */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
+                  <div className="bg-navy border border-white/10 rounded-lg shadow-2xl shadow-black/40 py-2 min-w-[180px]">
+                    {link.dropdown.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block font-body text-sm text-white/70 hover:text-white hover:bg-white/5 px-5 py-2.5 transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`font-body text-sm tracking-wide transition-colors relative pb-0.5 ${
+                  isActive(link.href)
+                    ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gold after:rounded-full"
+                    : "text-white/65 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </nav>
 
-        {/* Desktop CTA */}
+        {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <Link
             href="/subscribe"
-            className="font-body text-sm text-white/65 hover:text-white transition-colors"
+            className="font-body text-sm text-white border border-white/40 rounded-full px-4 py-1.5 hover:border-white hover:bg-white/10 transition-colors"
           >
             Subscribe
           </Link>
@@ -87,20 +161,35 @@ export default function Nav() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div id="mobile-menu" className="md:hidden bg-navy border-t border-white/10">
-          <nav className="max-w-[1200px] mx-auto px-6 py-6 flex flex-col gap-5" aria-label="Mobile navigation">
+          <nav className="max-w-[1440px] mx-auto px-6 py-6 flex flex-col gap-5" aria-label="Mobile navigation">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`font-body text-base transition-colors ${isActive(link.href) ? "text-gold font-semibold" : "text-white/75 hover:text-white"}`}
-                onClick={() => setMobileOpen(false)}
-                aria-current={isActive(link.href) ? "page" : undefined}
-              >
-                {link.label}
-              </Link>
+              <div key={link.href} className="flex flex-col gap-2">
+                <Link
+                  href={link.href}
+                  className={`font-body text-base transition-colors ${isActive(link.href) ? "text-gold font-semibold" : "text-white/75 hover:text-white"}`}
+                  onClick={() => setMobileOpen(false)}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                >
+                  {link.label}
+                </Link>
+                {link.dropdown && (
+                  <div className="flex flex-col gap-1 pl-3 border-l border-white/10">
+                    {link.dropdown.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="font-body text-sm text-white/50 hover:text-white/80 transition-colors py-0.5"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
             <div className="flex flex-col gap-3 pt-2 border-t border-white/10">
-              <Link href="/subscribe" className="font-body text-sm text-white/65 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+              <Link href="/subscribe" className="font-body text-sm text-white border border-white/40 rounded-full px-5 py-3 text-center hover:border-white hover:bg-white/10 transition-colors" onClick={() => setMobileOpen(false)}>
                 Subscribe to Updates
               </Link>
               <Link href="/give" className="font-body text-sm font-semibold bg-gold text-white px-5 py-3 rounded-full text-center hover:bg-gold/90 transition-colors" onClick={() => setMobileOpen(false)}>

@@ -64,6 +64,7 @@ export default function GivePage() {
   return (
     <>
       <Hero
+        compact
         title="Your Gift Advances the Gospel"
         subtitle="Every dollar equips an indigenous pastor, places a Bible in someone's hands, or helps plant a village church."
         imageSrc="https://picsum.photos/seed/hbm-give/1920/1080"
@@ -71,8 +72,8 @@ export default function GivePage() {
       />
 
       {/* Giving Pathways */}
-      <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+      <section id="pathways" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="text-center mb-12">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">How to Give</span>
             <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Choose Your Giving Path</h2>
@@ -111,8 +112,8 @@ export default function GivePage() {
       </section>
 
       {/* Give by Check */}
-      <section className="bg-white border-t border-divider">
-        <div className="max-w-[1200px] mx-auto px-6 py-14">
+      <section id="check" className="bg-white border-t border-divider">
+        <div className="max-w-[1440px] mx-auto px-6 py-14">
           <div className="max-w-xl mx-auto text-center">
             <h3 className="font-heading font-bold text-2xl text-navy">Give by Check</h3>
             <p className="font-body text-text mt-4 leading-relaxed">
@@ -127,8 +128,8 @@ export default function GivePage() {
       </section>
 
       {/* Trust Signals */}
-      <section className="bg-surface">
-        <div className="max-w-[1200px] mx-auto px-6 py-14">
+      <section id="trust" className="bg-surface">
+        <div className="max-w-[1440px] mx-auto px-6 py-14">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="flex flex-col items-center gap-3 p-8 bg-white border border-divider rounded-lg">
               <span className="font-heading font-bold text-2xl text-navy">501(c)(3)</span>

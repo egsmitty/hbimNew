@@ -11,12 +11,39 @@ export const metadata: Metadata = {
 };
 
 const timeline = [
-  { year: "1984", event: "Four men receive a calling while working with Open Doors in Southern Africa. The Timothy Project is born to address pastor shortages in Mozambique.", milestone: true },
+  { year: "1984", event: "Four men receive a calling while working with Open Doors in Southern Africa. The Timothy Project is born to address pastor shortages in Mozambique — then the poorest country in the world, ravaged by civil war, its pastors specifically targeted.", milestone: true },
   { year: "1990", event: "The Timothy Training Institute is formally established, beginning decades of pastoral education.", milestone: false },
   { year: "2001", event: "HBM establishes its 11,000th village church across eight African nations through indigenous partnerships.", milestone: false },
   { year: "2002", event: "Johan Gous joins the ministry, bringing renewed vision and leadership to the work in Africa.", milestone: false },
   { year: "2010", event: "Johan Gous becomes President of Hope Builders Ministries, headquartered in Charlottesville, Virginia.", milestone: false },
   { year: "2013", event: "HBM expands into Asia — coordinating pastor training and discipleship across 4,000+ churches in India, Pakistan, and Bangladesh.", milestone: true },
+];
+
+const threeEs = [
+  {
+    letter: "E",
+    word: "Equip",
+    description: "Providing indigenous pastors and church leaders with theology, leadership training, Bibles in native languages, and the practical tools they need for ministry.",
+  },
+  {
+    letter: "E",
+    word: "Empower",
+    description: "Empowering local believers — those who already know the language, culture, and community — to reach their own people in ways that no outsider ever could.",
+  },
+  {
+    letter: "E",
+    word: "Encourage",
+    description: "Walking alongside leaders for the long haul, encouraging one another to grow to maturity and multiply disciples generation after generation.",
+  },
+];
+
+const beliefs = [
+  "The Bible is the inspired and only infallible and authoritative Word of God.",
+  "Jesus Christ has paid the penalty of sin for all mankind by dying in man's place.",
+  "We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit.",
+  "We believe in the bodily resurrection of Jesus Christ and His ascension to the right hand of the Father.",
+  "We believe that salvation is by grace alone, through faith alone, in Christ alone.",
+  "We believe in the Great Commission — the call of every believer to make disciples of all nations.",
 ];
 
 const programs = [
@@ -66,6 +93,33 @@ const programs = [
     ),
   },
   {
+    title: "Prison Ministry",
+    description: "HBM partners with chaplains and church leaders to bring discipleship into correctional facilities. Working in 13 prisons in Mozambique, the program has documented an 80% improvement in prison culture and inmate wellbeing.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+      </svg>
+    ),
+  },
+  {
+    title: "U.S. Conferences",
+    description: "HBM hosts and participates in conferences across the United States, equipping American Christians to become disciple-makers and deepening the partnership between Western donors and indigenous field leaders.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Emergency Medical Fund",
+    description: "A dedicated fund providing emergency medical assistance to indigenous missionaries and field partners who face life-threatening health needs with no access to standard healthcare.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    ),
+  },
+  {
     title: "Practical Support",
     description: "Bicycles, motorcycles, seeds, garden tools, and water wells — meeting the practical needs that allow pastors to reach remote communities and serve their congregations.",
     icon: (
@@ -79,16 +133,16 @@ const programs = [
 const team = [
   {
     name: "Johan Gous",
-    title: "President",
+    title: "Founder & President (2010–2025)",
     imageSeed: "hbm-team-jg",
-    bio: "Johan joined HBM in 2002 and has served as President since 2010. His vision — forged in the fields of Malawi — has shaped HBM's strategy of equipping indigenous leaders rather than importing Western models.",
+    bio: "Johan joined HBM in 2002 and served as President from 2010 until his passing on May 27, 2025. His vision — forged in the fields of Malawi — shaped HBM's strategy of equipping indigenous leaders rather than importing Western models. His legacy endures in every pastor trained and every church planted.",
   },
   {
     name: "Lawrence Gunnells",
-    title: "Team Member",
+    title: "President",
     imageSeed: "hbm-team-lg",
     email: "lawrence@hbmin.org",
-    bio: "Lawrence serves on the HBM team, supporting ministry partnerships and donor relations.",
+    bio: "Lawrence now serves as President of Hope Builders Ministries, carrying forward the vision and strategy that has built a global movement of indigenous church leaders across Africa and Asia.",
   },
   {
     name: "Jeff Hawkins",
@@ -110,8 +164,8 @@ export default function AboutPage() {
       />
 
       {/* Mission + Vision */}
-      <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+      <section id="mission" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
               <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">
@@ -141,9 +195,44 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* The Three E's */}
+      <section id="threeEs" className="bg-surface">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
+          <div className="text-center mb-14">
+            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Our Approach</span>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">The Three E&rsquo;s</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {threeEs.map((item) => (
+              <div key={item.word} className="bg-white rounded-lg p-10 border border-divider flex flex-col gap-4">
+                <div className="flex items-baseline gap-1">
+                  <span className="font-heading font-bold text-6xl text-gold/20 leading-none">{item.letter}</span>
+                </div>
+                <h3 className="font-heading font-bold text-2xl text-navy -mt-2">{item.word}</h3>
+                <p className="font-body text-base text-text leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Vision Statement */}
+      <section className="bg-navy">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Where We Are Headed</span>
+            <blockquote className="mt-6">
+              <p className="font-heading text-xl md:text-2xl text-white italic leading-relaxed">
+                &ldquo;Hope Builders Ministries&rsquo; vision is to equip, encourage and empower Christian leaders in the Word of God, enabling them to better enlist their congregations to the Great Commission mission, making disciples in their communities and beyond as they share the Gospel of Grace and then encouraging one another to grow to maturity.&rdquo;
+              </p>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
       {/* Timeline */}
-      <section className="bg-surface">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+      <section id="timeline" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="text-center mb-14">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">History</span>
             <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Our Journey</h2>
@@ -152,8 +241,7 @@ export default function AboutPage() {
             <div className="absolute left-7 top-0 bottom-0 w-px bg-divider" />
             <div className="flex flex-col gap-0">
               {timeline.map((item) => (
-                <div key={item.year} className={`relative pl-20 pb-10 ${item.milestone ? "" : ""}`}>
-                  {/* Year badge */}
+                <div key={item.year} className="relative pl-20 pb-10">
                   <div className={`absolute left-0 top-0 flex items-center justify-center shrink-0 rounded-full ${
                     item.milestone
                       ? "w-14 h-14 bg-gold"
@@ -165,7 +253,6 @@ export default function AboutPage() {
                       {item.year}
                     </span>
                   </div>
-                  {/* Content */}
                   <div className={`pt-2 ${item.milestone ? "pl-2" : ""}`}>
                     {item.milestone && (
                       <span className="inline-block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-1">
@@ -185,12 +272,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Impact Numbers — light variant to avoid blue stacking */}
-      <ImpactBar dark={false} />
+      {/* Impact Numbers */}
+      <ImpactBar />
 
-      {/* Programs Detail — icon cards matching homepage */}
-      <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+      {/* Programs Detail */}
+      <section id="programs" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="text-center mb-12">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">What We Do</span>
             <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Programs &amp; Initiatives</h2>
@@ -207,9 +294,29 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* What We Believe */}
+      <section id="beliefs" className="bg-surface">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
+          <div className="text-center mb-12">
+            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Foundation</span>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">What We Believe</h2>
+          </div>
+          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {beliefs.map((belief, i) => (
+              <div key={i} className="bg-white rounded-lg p-7 border border-divider flex gap-4 items-start">
+                <span className="shrink-0 w-7 h-7 rounded-full bg-gold/10 flex items-center justify-center mt-0.5">
+                  <span className="font-heading font-bold text-xs text-gold">{i + 1}</span>
+                </span>
+                <p className="font-body text-base text-text leading-relaxed">{belief}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Team */}
-      <section className="bg-surface">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+      <section id="team" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="text-center mb-12">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">The People</span>
             <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Our Team</h2>
@@ -217,7 +324,6 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.map((member) => (
               <div key={member.name} className="bg-white rounded-lg overflow-hidden border border-divider flex flex-col">
-                {/* Photo well */}
                 <div className="relative w-full aspect-[4/3] overflow-hidden">
                   <Image
                     src={`https://picsum.photos/seed/${member.imageSeed}/400/300`}
@@ -227,7 +333,6 @@ export default function AboutPage() {
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
-                {/* Content */}
                 <div className="p-7 flex flex-col gap-3 flex-1">
                   <div>
                     <h3 className="font-heading font-bold text-navy text-xl">{member.name}</h3>

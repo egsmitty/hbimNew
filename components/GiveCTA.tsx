@@ -15,7 +15,7 @@ export default function GiveCTA({
 }: GiveCTAProps) {
   return (
     <section className="bg-navy text-white">
-      <div className="max-w-[1200px] mx-auto px-6 py-20 text-center">
+      <div className="max-w-[1440px] mx-auto px-6 py-20 text-center">
         <h2 className="font-heading font-bold text-3xl md:text-4xl leading-tight">
           {heading}
         </h2>
@@ -24,7 +24,7 @@ export default function GiveCTA({
         </p>
         <Link
           href={href}
-          className="inline-block mt-8 font-body font-semibold text-base bg-gold text-white px-10 py-4 rounded hover:bg-gold/90 transition-colors"
+          className="inline-flex items-center justify-center mt-8 font-body font-semibold text-base bg-gold text-white px-10 py-4 rounded hover:bg-gold/90 transition-colors"
         >
           {buttonLabel}
         </Link>

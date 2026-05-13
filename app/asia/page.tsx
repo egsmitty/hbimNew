@@ -3,6 +3,7 @@ import Image from "next/image";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
+import ImpactGlobe from "@/components/ImpactGlobe";
 
 export const metadata: Metadata = {
   title: "Asia — Hope Builders Ministries",
@@ -65,8 +66,8 @@ export default function AsiaPage() {
       />
 
       {/* Overview — split with large portrait image */}
-      <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-24">
+      <section id="overview" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
               <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">The Work</span>
@@ -96,28 +97,40 @@ export default function AsiaPage() {
       {/* Asia Impact Stats */}
       <ImpactBar stats={asiaStats} />
 
-      {/* Countries — editorial list layout */}
-      <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-24">
+      {/* 3D Interactive Globe */}
+      <section id="map" className="bg-[#0a1628]">
+        <div className="max-w-[1440px] mx-auto px-6 py-16">
+          <div className="mb-10 text-center">
+            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">
+              Interactive Map
+            </span>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-white mt-3">
+              Explore Where We Work
+            </h2>
+            <p className="font-body text-sm text-white/50 mt-3">
+              Drag to explore &middot; Click a pin to learn more
+            </p>
+          </div>
+          <ImpactGlobe region="asia" />
+        </div>
+      </section>
+
+      {/* Countries — card grid */}
+      <section id="nations" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="mb-16">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Where We Work</span>
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Three Nations</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {countries.map((country, i) => (
-              <div key={country.name} className="flex gap-6 py-8 border-b border-divider">
-                {/* Number accent */}
-                <div className="shrink-0 w-10 text-right">
-                  <span className="font-heading font-bold text-3xl text-gold/30 leading-none">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                {/* Content */}
-                <div className="flex flex-col gap-2">
-                  <h3 className="font-heading font-bold text-xl text-navy">{country.name}</h3>
-                  <p className="font-body text-base text-text leading-relaxed">{country.description}</p>
-                </div>
+              <div key={country.name} className="flex flex-col gap-3 p-7 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
+                <span className="font-heading font-bold text-3xl text-gold/25 leading-none">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-heading font-bold text-xl text-navy">{country.name}</h3>
+                <p className="font-body text-sm text-text leading-relaxed">{country.description}</p>
               </div>
             ))}
           </div>
@@ -125,8 +138,8 @@ export default function AsiaPage() {
       </section>
 
       {/* Field Reports — large portrait cards with overlay text */}
-      <section className="bg-surface">
-        <div className="max-w-[1200px] mx-auto px-6 py-24">
+      <section id="reports" className="bg-surface">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="mb-14">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">From the Field</span>
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Stories &amp; Reports</h2>

@@ -53,36 +53,14 @@ export default function SubscribePage() {
   return (
     <>
       <Hero
+        compact
         title="Stories From the Field"
-        subtitle="Receive updates on the work in Africa and Asia — pastor training graduations, Bible distributions, new churches planted, and answered prayers."
+        subtitle="Real updates from Africa and Asia — straight to your inbox."
         imageSrc="https://picsum.photos/seed/hbm-subscribe/1920/1080"
         imageAlt="Community gathered in worship in rural Africa"
       />
 
-      {/* What you'll receive — icon cards */}
-      <section className="bg-white border-b border-divider">
-        <div className="max-w-[1200px] mx-auto px-6 py-16">
-          <div className="text-center mb-10">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">What You&apos;ll Receive</span>
-            <h2 className="font-heading font-bold text-3xl text-navy mt-3">Stay Connected to the Work</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {benefits.map((item) => (
-              <div key={item.label} className="flex flex-col items-center text-center gap-4 p-8 border border-divider rounded-lg">
-                <div className="w-14 h-14 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 className="font-heading font-bold text-navy text-lg">{item.label}</h3>
-                  <p className="font-body text-sm text-text mt-2 leading-relaxed">{item.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Email form */}
+      {/* Email form — immediately below hero */}
       <section className="bg-surface">
         <div className="max-w-[560px] mx-auto px-6 py-20 text-center">
           {submitted ? (
@@ -124,6 +102,29 @@ export default function SubscribePage() {
               </p>
             </>
           )}
+        </div>
+      </section>
+
+      {/* What you'll receive — benefit cards below form */}
+      <section className="bg-white border-t border-divider">
+        <div className="max-w-[1440px] mx-auto px-6 py-16">
+          <div className="text-center mb-10">
+            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">What You&apos;ll Receive</span>
+            <h2 className="font-heading font-bold text-3xl text-navy mt-3">Stay Connected to the Work</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {benefits.map((item) => (
+              <div key={item.label} className="flex flex-col items-center text-center gap-4 p-8 border border-divider rounded-lg">
+                <div className="w-14 h-14 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
+                  {item.icon}
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-navy text-lg">{item.label}</h3>
+                  <p className="font-body text-sm text-text mt-2 leading-relaxed">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>

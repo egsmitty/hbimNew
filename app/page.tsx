@@ -3,6 +3,8 @@ import Link from "next/link";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
+import AnimateFadeUp from "@/components/AnimateFadeUp";
+import { StaggerGrid, StaggerItem } from "@/components/AnimateStaggerGrid";
 
 const programs = [
   {
@@ -68,7 +70,7 @@ export default function HomePage() {
 
       {/* 2. Mission Bar */}
       <section className="bg-white border-b border-divider">
-        <div className="max-w-[1200px] mx-auto px-6 py-10 text-center">
+        <div className="max-w-[1440px] mx-auto px-6 py-10 text-center">
           <p className="font-heading text-xl md:text-2xl text-navy font-semibold leading-snug max-w-3xl mx-auto">
             Since 1984, Hope Builders Ministries has partnered with the local church to bring the Gospel to the
             unreached — one village, one pastor, one Bible at a time.
@@ -81,10 +83,12 @@ export default function HomePage() {
 
       {/* 4. Africa + Asia Cards */}
       <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
-          <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy text-center mb-12">
-            Where We Work
-          </h2>
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
+          <AnimateFadeUp>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy text-center mb-12">
+              Where We Work
+            </h2>
+          </AnimateFadeUp>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
@@ -137,7 +141,7 @@ export default function HomePage() {
 
       {/* 5. Story Section */}
       <section className="bg-surface">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
               <Image
@@ -149,10 +153,12 @@ export default function HomePage() {
               />
             </div>
             <div>
-              <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Our Story</span>
-              <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3 leading-tight">
-                It Started With One Shared Bible
-              </h2>
+              <AnimateFadeUp>
+                <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Our Story</span>
+                <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3 leading-tight">
+                  It Started With One Shared Bible
+                </h2>
+              </AnimateFadeUp>
               <p className="font-body text-base text-text mt-6 leading-relaxed">
                 When Johan Gous arrived in Malawi, he found an entire congregation sharing a single Bible. He exchanged 100 new Bibles for that one worn copy — and the vision of Hope Builders Ministries was born.
               </p>
@@ -175,26 +181,28 @@ export default function HomePage() {
 
       {/* 6. Programs Overview */}
       <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
-          <div className="text-center mb-12">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
+          <AnimateFadeUp className="text-center mb-12">
             <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">What We Do</span>
             <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Programs &amp; Initiatives</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          </AnimateFadeUp>
+          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {programs.map((program) => (
-              <div key={program.title} className="flex flex-col gap-4 p-8 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
-                <div className="text-gold">{program.icon}</div>
-                <h3 className="font-heading font-semibold text-lg text-navy">{program.title}</h3>
-                <p className="font-body text-base text-text leading-relaxed">{program.description}</p>
-              </div>
+              <StaggerItem key={program.title}>
+                <div className="flex flex-col gap-4 p-8 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all h-full">
+                  <div className="text-gold">{program.icon}</div>
+                  <h3 className="font-heading font-semibold text-lg text-navy">{program.title}</h3>
+                  <p className="font-body text-base text-text leading-relaxed">{program.description}</p>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         </div>
       </section>
 
       {/* 7. Trust Bar */}
       <section className="bg-surface border-y border-divider">
-        <div className="max-w-[1200px] mx-auto px-6 py-10">
+        <div className="max-w-[1440px] mx-auto px-6 py-10">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-center">
             {[
               { value: "1984", label: "Founded" },
