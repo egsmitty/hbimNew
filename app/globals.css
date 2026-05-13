@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================
+   HBM Design Tokens — Tailwind v4 Theme
+   ============================================
+   These map directly to Spec.md color system.
+   Usage: bg-navy, text-gold, bg-surface, etc.
+   ============================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Brand Colors */
+  --color-navy: #19355e;
+  --color-gold: #C8973A;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Backgrounds & Surfaces */
+  --color-background: #ffffff;
+  --color-surface: #eeeeee;
+  --color-divider: #ededed;
+
+  /* Text */
+  --color-foreground: #1a1a1a;
+  --color-text: #555555;
+  --color-text-muted: #777777;
+
+  /* Fonts — set by next/font in layout.tsx */
+  --font-heading: var(--font-playfair);
+  --font-body: var(--font-inter);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
