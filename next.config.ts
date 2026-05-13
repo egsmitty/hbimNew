@@ -9,8 +9,18 @@ const nextConfig: NextConfig = {
   //   output: "export",
   //   images: { unoptimized: true },
   images: {
-    // Placeholder domains — replace with real CDN/image host when photos arrive
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        // Demo photography via picsum.photos — replace with real CDN when photos arrive
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+      {
+        // Future: real photos will be served from here
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
 };
 

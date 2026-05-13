@@ -62,7 +62,8 @@ export default function GivePage() {
       <Hero
         title="Your Gift Advances the Gospel"
         subtitle="Every dollar equips an indigenous pastor, places a Bible in someone's hands, or helps plant a village church."
-        imageLabel="Give — ministry photography"
+        imageSrc="https://picsum.photos/seed/hbm-give/1920/1080"
+        imageAlt="Hands extended in generosity and giving"
       />
 
       {/* Giving Pathways */}

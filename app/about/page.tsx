@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
@@ -77,13 +78,14 @@ export default function AboutPage() {
       <Hero
         title="Forty Years of Advancing the Gospel"
         subtitle="A story of faithfulness, partnership, and the unstoppable power of the local church."
-        imageLabel="About — field photography"
+        imageSrc="https://picsum.photos/seed/hbm-about/1920/1080"
+        imageAlt="A large community gathering representing HBM's global reach"
       />
 
       {/* Mission + Vision */}
       <section className="bg-white">
         <div className="max-w-[1200px] mx-auto px-6 py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
               <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">
                 Our Mission

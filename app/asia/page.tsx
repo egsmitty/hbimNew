@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
@@ -56,15 +57,22 @@ export default function AsiaPage() {
         title="The Gospel is Advancing Across Asia"
         subtitle="Since 2013, HBM has partnered with indigenous leaders in India, Pakistan, and Bangladesh to train pastors and plant churches."
         ctaPrimary={{ label: "Give to Asia", href: "/give" }}
-        imageLabel="Asia — field photography"
+        imageSrc="https://picsum.photos/seed/hbm-asia/1920/1080"
+        imageAlt="Community gathering in South Asia"
       />
 
       {/* Overview */}
       <section className="bg-white">
         <div className="max-w-[1200px] mx-auto px-6 py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="w-full aspect-[4/3] bg-gradient-to-br from-navy/80 to-navy/50 rounded-lg flex items-center justify-center">
-              <span className="font-body text-xs text-white/30 uppercase tracking-widest">Asia field photo</span>
+            <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
+              <Image
+                src="https://picsum.photos/seed/hbm-asia2/800/600"
+                alt="Indigenous pastor in South Asia"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             </div>
             <div>
               <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">The Work</span>
@@ -113,10 +121,14 @@ export default function AsiaPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {fieldReports.map((report, i) => (
               <div key={i} className="bg-white rounded-lg overflow-hidden border border-divider">
-                <div className="w-full h-48 bg-gradient-to-br from-navy/80 to-navy/50 flex items-center justify-center">
-                  <span className="font-body text-xs text-white/30 uppercase tracking-widest px-4 text-center">
-                    {report.imageLabel}
-                  </span>
+                <div className="relative w-full h-48">
+                  <Image
+                    src={`https://picsum.photos/seed/hbm-asia-field${i + 1}/600/400`}
+                    alt={report.imageLabel}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
                 </div>
                 <div className="p-6">
                   <p className="font-body text-sm text-text leading-relaxed">{report.caption}</p>

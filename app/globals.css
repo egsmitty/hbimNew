@@ -2,33 +2,34 @@
 
 /* ============================================
    HBM Design Tokens — Tailwind v4 Theme
-   ============================================
-   These map directly to Spec.md color system.
-   Usage: bg-navy, text-gold, bg-surface, etc.
    ============================================ */
 
 @theme inline {
-  /* Brand Colors */
   --color-navy: #19355e;
   --color-gold: #C8973A;
-
-  /* Backgrounds & Surfaces */
   --color-background: #ffffff;
   --color-surface: #eeeeee;
   --color-divider: #ededed;
-
-  /* Text */
   --color-foreground: #1a1a1a;
   --color-text: #555555;
   --color-text-muted: #777777;
-
-  /* Fonts — set by next/font in layout.tsx */
   --font-heading: var(--font-playfair);
   --font-body: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--color-background);
   color: var(--color-text);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Accessible focus ring — visible for keyboard users, hidden for mouse */
+:focus-visible {
+  outline: 2px solid #C8973A;
+  outline-offset: 3px;
+  border-radius: 3px;
 }

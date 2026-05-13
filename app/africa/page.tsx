@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
@@ -81,7 +82,8 @@ export default function AfricaPage() {
         title="The Church Is Rising Across Africa"
         subtitle="Eight nations. Thousands of pastors. Hundreds of thousands of Bibles. The Gospel is advancing — one village church at a time."
         ctaPrimary={{ label: "Give to Africa", href: "/give" }}
-        imageLabel="Africa — field photography"
+        imageSrc="https://picsum.photos/seed/hbm-africa/1920/1080"
+        imageAlt="Church community gathered in rural Africa"
       />
 
       {/* Overview */}
@@ -100,8 +102,14 @@ export default function AfricaPage() {
                 The result is a movement that cannot be stopped. Trained pastors train other pastors. Village churches plant more village churches. The Gospel multiplies organically, deeply rooted in local culture and language.
               </p>
             </div>
-            <div className="w-full aspect-[4/3] bg-gradient-to-br from-navy/80 to-navy/50 rounded-lg flex items-center justify-center">
-              <span className="font-body text-xs text-white/30 uppercase tracking-widest">Africa field photo</span>
+            <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
+              <Image
+                src="https://picsum.photos/seed/hbm-africa2/800/600"
+                alt="Indigenous pastor leading a community in Africa"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             </div>
           </div>
         </div>
@@ -138,10 +146,14 @@ export default function AfricaPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {fieldReports.map((report, i) => (
               <div key={i} className="bg-white rounded-lg overflow-hidden border border-divider">
-                <div className="w-full h-48 bg-gradient-to-br from-navy/80 to-navy/50 flex items-center justify-center">
-                  <span className="font-body text-xs text-white/30 uppercase tracking-widest px-4 text-center">
-                    {report.imageLabel}
-                  </span>
+                <div className="relative w-full h-48">
+                  <Image
+                    src={`https://picsum.photos/seed/hbm-africa-field${i + 1}/600/400`}
+                    alt={report.imageLabel}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
                 </div>
                 <div className="p-6">
                   <p className="font-body text-sm text-text leading-relaxed">{report.caption}</p>

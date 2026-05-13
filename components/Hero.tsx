@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 interface HeroProps {
@@ -5,7 +6,8 @@ interface HeroProps {
   subtitle?: string;
   ctaPrimary?: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
-  imageLabel?: string;
+  imageSrc?: string;
+  imageAlt?: string;
   tall?: boolean;
 }
 
@@ -14,22 +16,32 @@ export default function Hero({
   subtitle,
   ctaPrimary,
   ctaSecondary,
-  imageLabel = "Photo placeholder",
+  imageSrc,
+  imageAlt = "",
   tall = false,
 }: HeroProps) {
   return (
     <section
-      className={`relative w-full flex items-center justify-center bg-gradient-to-br from-navy via-navy/95 to-navy/80 ${
+      className={`relative w-full flex items-center justify-center overflow-hidden ${
         tall ? "min-h-[85vh]" : "min-h-[420px] md:min-h-[520px]"
       }`}
     >
-      {/* Placeholder label — remove when real photo is dropped in */}
-      <span className="absolute inset-0 flex items-end justify-end p-4 font-body text-xs text-white/20 uppercase tracking-widest pointer-events-none">
-        {imageLabel}
-      </span>
+      {/* Background — real image or navy gradient fallback */}
+      {imageSrc ? (
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/95 to-navy/80" />
+      )}
 
-      {/* Overlay gradient for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent" />
+      {/* Dark overlay for text legibility */}
+      <div className="absolute inset-0 bg-navy/60" />
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 py-20 text-center text-white">
         <h1
@@ -43,7 +55,7 @@ export default function Hero({
         </h1>
 
         {subtitle && (
-          <p className="font-body text-lg md:text-xl text-white/80 mt-6 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-body text-lg md:text-xl text-white/85 mt-6 max-w-2xl mx-auto leading-relaxed">
             {subtitle}
           </p>
         )}
