@@ -28,7 +28,7 @@ export default function ContactPage() {
             We&apos;d Love to Hear From You
           </h1>
           <p className="font-body text-white/75 text-lg mt-5 max-w-xl mx-auto leading-relaxed">
-            The HBM team is always looking for disciples of Christ who desire to multiply disciples for Christ around the world.
+            Have a question, want to learn more about HBM, or looking to get involved? We&apos;d love to hear from you.
           </p>
         </div>
       </section>

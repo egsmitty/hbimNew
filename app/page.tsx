@@ -86,57 +86,51 @@ export default function HomePage() {
             Where We Work
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Link href="/africa" className="group block">
-              <div className="relative overflow-hidden rounded-lg">
-                <div className="relative w-full h-72">
-                  <Image
-                    src="https://picsum.photos/seed/hbm-africa-card/800/600"
-                    alt="Ministry work in Africa"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-navy/60" />
+            {[
+              {
+                href: "/africa",
+                src: "https://picsum.photos/seed/hbm-africa-card/800/600",
+                alt: "Ministry work in Africa",
+                label: "8 Nations",
+                title: "Africa",
+                stat: "11,000 village churches · 25,000 trained pastors",
+                cta: "Explore Africa Ministry",
+              },
+              {
+                href: "/asia",
+                src: "https://picsum.photos/seed/hbm-asia-card/800/600",
+                alt: "Ministry work in Asia",
+                label: "India · Pakistan · Bangladesh",
+                title: "Asia",
+                stat: "4,000+ churches · 1,000+ new churches planted",
+                cta: "Explore Asia Ministry",
+              },
+            ].map((card) => (
+              <Link key={card.href} href={card.href} className="group block rounded-lg overflow-hidden">
+                {/* Image container — overflow-hidden here clips the scale correctly */}
+                <div className="relative w-full h-80 overflow-hidden">
+                  {/* Scale wrapper — only the image zooms, not the overlay or text */}
+                  <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+                    <Image src={card.src} alt={card.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+                  </div>
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent" />
+                  {/* Text */}
                   <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <span className="block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-2">8 Nations</span>
-                    <h3 className="font-heading text-white text-2xl font-bold">Africa</h3>
-                    <p className="font-body text-white/70 text-sm mt-1">11,000 village churches · 25,000 trained pastors</p>
+                    <span className="block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-2">{card.label}</span>
+                    <h3 className="font-heading text-white text-3xl font-bold">{card.title}</h3>
+                    <p className="font-body text-white/70 text-sm mt-2">{card.stat}</p>
                   </div>
                 </div>
+                {/* Footer bar */}
                 <div className="bg-surface px-8 py-4 flex items-center justify-between group-hover:bg-divider transition-colors">
-                  <span className="font-body text-sm font-semibold text-navy">Explore Africa Ministry</span>
+                  <span className="font-body text-sm font-semibold text-navy">{card.cta}</span>
                   <svg className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                   </svg>
                 </div>
-              </div>
-            </Link>
-
-            <Link href="/asia" className="group block">
-              <div className="relative overflow-hidden rounded-lg">
-                <div className="relative w-full h-72">
-                  <Image
-                    src="https://picsum.photos/seed/hbm-asia-card/800/600"
-                    alt="Ministry work in Asia"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-navy/60" />
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <span className="block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-2">India · Pakistan · Bangladesh</span>
-                    <h3 className="font-heading text-white text-2xl font-bold">Asia</h3>
-                    <p className="font-body text-white/70 text-sm mt-1">4,000+ churches · 1,000+ new churches planted</p>
-                  </div>
-                </div>
-                <div className="bg-surface px-8 py-4 flex items-center justify-between group-hover:bg-divider transition-colors">
-                  <span className="font-body text-sm font-semibold text-navy">Explore Asia Ministry</span>
-                  <svg className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -159,10 +153,10 @@ export default function HomePage() {
               <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3 leading-tight">
                 It Started With One Shared Bible
               </h2>
-              <p className="font-body text-text mt-6 leading-relaxed">
+              <p className="font-body text-base text-text mt-6 leading-relaxed">
                 When Johan Gous arrived in Malawi, he found an entire congregation sharing a single Bible. He exchanged 100 new Bibles for that one worn copy — and the vision of Hope Builders Ministries was born.
               </p>
-              <p className="font-body text-text mt-4 leading-relaxed">
+              <p className="font-body text-base text-text mt-4 leading-relaxed">
                 What began in 1984 as a calling to address pastor shortages in Mozambique has grown into a movement spanning eight African nations and three countries in South Asia — equipping thousands of indigenous leaders to reach their own people with the Gospel.
               </p>
               <blockquote className="mt-8 border-l-4 border-gold pl-6">
@@ -191,7 +185,7 @@ export default function HomePage() {
               <div key={program.title} className="flex flex-col gap-4 p-8 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
                 <div className="text-gold">{program.icon}</div>
                 <h3 className="font-heading font-semibold text-lg text-navy">{program.title}</h3>
-                <p className="font-body text-sm text-text leading-relaxed">{program.description}</p>
+                <p className="font-body text-base text-text leading-relaxed">{program.description}</p>
               </div>
             ))}
           </div>

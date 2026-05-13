@@ -12,6 +12,7 @@ const pathways = [
     title: "General Fund",
     description:
       "Your gift goes where it's needed most — funding pastor training, Bible distribution, and church planting across Africa and Asia.",
+    impact: "Every $50 trains a pastor for one month of front-line ministry.",
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
@@ -24,6 +25,7 @@ const pathways = [
     title: "Give to a Project",
     description:
       "Direct your gift to a specific initiative — Pastor Training, Bibles for Disciples, the Dignity Project, or another program close to your heart.",
+    impact: "100% of your gift reaches the initiative you choose — no detours.",
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
@@ -35,6 +37,7 @@ const pathways = [
     title: "Give to a Country",
     description:
       "Support the work in a specific nation — choose from any of HBM's eight African nations or three South Asian countries.",
+    impact: "Plant roots in one nation — your gift stays where you send it.",
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -47,6 +50,7 @@ const pathways = [
     title: "Give to a Team Member",
     description:
       "Support an HBM team member directly — funding their ministry and the work they're doing on the ground.",
+    impact: "Sustain a person, not just a program — real relationships, real impact.",
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -89,6 +93,10 @@ export default function GivePage() {
                     {pathway.title}
                   </h3>
                   <p className="font-body text-sm text-text mt-2 leading-relaxed">{pathway.description}</p>
+                  {/* Impact statement */}
+                  <p className="font-body text-sm text-gold/80 font-semibold mt-3 pl-3 border-l-2 border-gold/30 leading-snug">
+                    {pathway.impact}
+                  </p>
                 </div>
                 <span className="font-body text-sm font-semibold text-gold flex items-center gap-2 mt-auto">
                   Give Now
@@ -103,7 +111,7 @@ export default function GivePage() {
       </section>
 
       {/* Give by Check */}
-      <section className="bg-surface border-y border-divider">
+      <section className="bg-white border-t border-divider">
         <div className="max-w-[1200px] mx-auto px-6 py-14">
           <div className="max-w-xl mx-auto text-center">
             <h3 className="font-heading font-bold text-2xl text-navy">Give by Check</h3>
@@ -119,22 +127,22 @@ export default function GivePage() {
       </section>
 
       {/* Trust Signals */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div className="max-w-[1200px] mx-auto px-6 py-14">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="flex flex-col items-center gap-3 p-8 border border-divider rounded-lg">
+            <div className="flex flex-col items-center gap-3 p-8 bg-white border border-divider rounded-lg">
               <span className="font-heading font-bold text-2xl text-navy">501(c)(3)</span>
               <p className="font-body text-sm text-text leading-relaxed">
                 Hope Builders Ministries is a registered 501(c)(3) nonprofit. All gifts are tax deductible to the fullest extent allowed by law.
               </p>
             </div>
-            <div className="flex flex-col items-center gap-3 p-8 border border-divider rounded-lg">
+            <div className="flex flex-col items-center gap-3 p-8 bg-white border border-divider rounded-lg">
               <span className="font-heading font-bold text-2xl text-navy">ECFA</span>
               <p className="font-body text-sm text-text leading-relaxed">
                 We are an accredited member of the Evangelical Council for Financial Accountability, committed to transparency and financial integrity.
               </p>
             </div>
-            <div className="flex flex-col items-center gap-3 p-8 border border-divider rounded-lg">
+            <div className="flex flex-col items-center gap-3 p-8 bg-white border border-divider rounded-lg">
               <span className="font-heading font-bold text-2xl text-navy">Donor Portal</span>
               <p className="font-body text-sm text-text leading-relaxed">
                 Existing donors can log in to view giving history, update information, and manage recurring gifts.
