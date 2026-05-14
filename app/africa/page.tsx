@@ -57,7 +57,7 @@ export default function AfricaPage() {
                 Indigenous Leaders.<br />Local Churches.<br />Lasting Impact.
               </h2>
               <p className="font-body text-base text-text mt-6 leading-relaxed">
-                HBM's strategy in Africa is simple and proven: equip the people who are already there. Rather than sending Western missionaries to do the work, we come alongside indigenous pastors — training them, resourcing them, and trusting them to reach their own communities.
+                HBM&apos;s strategy in Africa is simple and proven: equip the people who are already there. Rather than sending Western missionaries to do the work, we come alongside indigenous pastors — training them, resourcing them, and trusting them to reach their own communities.
               </p>
               <p className="font-body text-base text-text mt-4 leading-relaxed">
                 The result is a movement that cannot be stopped. Trained pastors train other pastors. Village churches plant more village churches. The Gospel multiplies organically, deeply rooted in local culture and language.
