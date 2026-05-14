@@ -38,9 +38,9 @@ interface RegionCfg {
 
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
-    s1Cam: { x: -2.15, y: -2.35, z: 7.05 },
-    s1Rot: { x: 0.48, y: lngToRotY(32) - 0.05 },
-    s2:    { cam: { x: -0.1, y: 0.18, z: 3.82 }, rotX: 0.36, rotY: lngToRotY(33) },
+    s1Cam: { x: -2.25, y: -2.15, z: 7.0 },
+    s1Rot: { x: 0.66, y: lngToRotY(33) - 0.06 },
+    s2:    { cam: { x: -0.04, y: 0.26, z: 3.76 }, rotX: 0.56, rotY: lngToRotY(32.5) },
     // Both spellings because the dataset uses the long form
     countries: ['Malawi', 'Mozambique', 'Zimbabwe', 'Zambia', 'United Republic of Tanzania', 'Tanzania', 'Kenya', 'Uganda', 'South Africa'],
     pins: [
@@ -55,9 +55,9 @@ const CFG: Record<'africa' | 'asia', RegionCfg> = {
     ],
   },
   asia: {
-    s1Cam: { x: -2.1, y: -2.4, z: 7.0 },
-    s1Rot: { x: -0.34, y: lngToRotY(82) - 0.12 },
-    s2:    { cam: { x: -0.06, y: -0.14, z: 3.7 }, rotX: -0.5, rotY: lngToRotY(82) },
+    s1Cam: { x: -2.2, y: -2.25, z: 6.95 },
+    s1Rot: { x: -0.58, y: lngToRotY(83.5) - 0.08 },
+    s2:    { cam: { x: -0.02, y: -0.22, z: 3.6 }, rotX: -0.74, rotY: lngToRotY(82.5) },
     countries: ['India', 'Pakistan', 'Bangladesh'],
     pins: [
       { lat: 20.5, lng: 78.9, country: 'India' },
@@ -128,9 +128,10 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         depthWrite: false,
       })))
     }
-    addStarLayer(2700, 0.022, 46, 28, 0.18, 0.4)
-    addStarLayer(900, 0.048, 48, 24, 0.35, 0.45)
-    addStarLayer(260, 0.085, 50, 20, 0.6, 0.35)
+    addStarLayer(3400, 0.016, 46, 30, 0.1, 0.28)
+    addStarLayer(1200, 0.036, 48, 26, 0.22, 0.35)
+    addStarLayer(420, 0.064, 50, 22, 0.42, 0.34)
+    addStarLayer(120, 0.108, 52, 18, 0.68, 0.26)
 
     // ── Camera ─────────────────────────────────────────────────────────────
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 200)
@@ -172,9 +173,10 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         map: cloudTex,
         color: 0xffffff,
         transparent: true,
-        opacity: 0.42,
+        opacity: 0.5,
         depthWrite: false,
         side: THREE.DoubleSide,
+        shininess: 8,
       })
     )
     cloudMesh.renderOrder = 3
@@ -212,11 +214,11 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
     ))
 
     // ── Lights ─────────────────────────────────────────────────────────────
-    scene.add(new THREE.AmbientLight(0x5e6d84, 0.12))
-    const sunLight = new THREE.DirectionalLight(0xfff0c2, 2.7)
-    sunLight.position.set(-9, 7, 5)
+    scene.add(new THREE.AmbientLight(0x47566a, 0.08))
+    const sunLight = new THREE.DirectionalLight(0xffefc0, 3.25)
+    sunLight.position.set(-10.5, 8.4, 5.8)
     scene.add(sunLight)
-    const sunGlow = new THREE.PointLight(0xffe8a6, 1.8, 40, 2)
+    const sunGlow = new THREE.PointLight(0xffe8a6, 2.4, 48, 2)
     sunGlow.position.copy(sunLight.position)
     scene.add(sunGlow)
 
@@ -235,9 +237,43 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       blending: THREE.AdditiveBlending,
       transparent: true,
     }))
-    sunSprite.scale.set(5.6, 5.6, 1)
-    sunSprite.position.set(-10.5, 8.2, 3.2)
+    sunSprite.scale.set(6.4, 6.4, 1)
+    sunSprite.position.set(-11.2, 8.9, 3.4)
     scene.add(sunSprite)
+
+    const rayCanvas = document.createElement('canvas')
+    rayCanvas.width = rayCanvas.height = 512
+    const rctx = rayCanvas.getContext('2d')!
+    rctx.translate(256, 256)
+    for (let i = 0; i < 18; i++) {
+      rctx.save()
+      rctx.rotate((Math.PI * 2 * i) / 18 + (i % 2) * 0.08)
+      const width = i % 3 === 0 ? 28 : 16
+      const length = i % 4 === 0 ? 250 : 190
+      const grad = rctx.createLinearGradient(0, 0, length, 0)
+      grad.addColorStop(0, 'rgba(255,244,210,0.18)')
+      grad.addColorStop(0.32, 'rgba(255,223,145,0.09)')
+      grad.addColorStop(1, 'rgba(255,223,145,0)')
+      rctx.fillStyle = grad
+      rctx.beginPath()
+      rctx.moveTo(0, 0)
+      rctx.lineTo(length, width / 2)
+      rctx.lineTo(length, -width / 2)
+      rctx.closePath()
+      rctx.fill()
+      rctx.restore()
+    }
+    const rayTexture = new THREE.CanvasTexture(rayCanvas)
+    const sunRaySprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: rayTexture,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      opacity: 0.72,
+      depthWrite: false,
+    }))
+    sunRaySprite.scale.set(18, 18, 1)
+    sunRaySprite.position.set(-12.8, 10.4, 2.7)
+    scene.add(sunRaySprite)
 
     // ── Overlay helpers ────────────────────────────────────────────────────
     let overlayGroup: THREE.Group | null = null
@@ -392,12 +428,12 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       const t = clock.getElapsedTime()
 
       // Clouds spin independently of the globe group's orientation
-      cloudMesh.rotation.y += 0.00052
+      cloudMesh.rotation.y += 0.00062
 
       // Subtle drift in Stage 1 — a few degrees over ~13s loop; gives the scene life
       if (currentStage === 'space') {
-        globeGroup.rotation.x = cfg.s1Rot.x + Math.sin(t * 0.09) * 0.015
-        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(t * 0.12) * 0.024
+        globeGroup.rotation.x = cfg.s1Rot.x + Math.sin(t * 0.09) * 0.018
+        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(t * 0.12) * 0.022
       }
 
       // Pulsing pin rings

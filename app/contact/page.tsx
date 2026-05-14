@@ -21,7 +21,13 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy text-white">
+      <section
+        className="text-white border-t-2 border-gold/60"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, rgba(200,151,58,0.10) 0%, rgba(15,32,60,0) 65%), #0f2040",
+        }}
+      >
         <div className="max-w-[1440px] mx-auto px-6 py-20 text-center">
           <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">Get In Touch</span>
           <h1 className="font-heading font-bold text-4xl md:text-5xl mt-3 leading-tight">

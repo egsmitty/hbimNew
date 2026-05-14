@@ -118,9 +118,9 @@ export default function HomePage() {
               </p>
               <blockquote className="mt-8 border-l-4 border-gold pl-6">
                 <p className="font-heading text-lg text-navy italic leading-snug">
-                  &ldquo;Equipping the saints for the work of ministry, for building up the body of Christ.&rdquo;
+                  &ldquo;We equip, encourage, and empower Christian leaders in the Word of God so they can make disciples in their communities and beyond.&rdquo;
                 </p>
-                <cite className="block font-body text-sm text-text-muted mt-2 not-italic">Ephesians 4:12</cite>
+                <cite className="block font-body text-sm text-text-muted mt-2 not-italic">Hope Builders Ministries Vision</cite>
               </blockquote>
               <Link href="/about" className="inline-block mt-8 font-body text-sm font-semibold text-gold hover:text-gold/80 transition-colors">
                 Read the full story →
