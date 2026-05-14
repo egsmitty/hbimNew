@@ -9,7 +9,7 @@ import {
   type CountryImpact,
 } from './countryImpactData'
 
-const GLOBE_RADIUS = 2
+const GLOBE_RADIUS = 2.06
 const GOLD = 0xc8973a
 const GOLD_BRIGHT = 0xffdf89
 const GOLD_DIM = 0x7f6231
@@ -59,14 +59,18 @@ interface RingAnim {
 }
 
 const CARD_VERTICAL_BIAS: Partial<Record<string, number>> = {
+  kenya: 30,
+  malawi: 18,
+  tanzania: 28,
   india: 36,
   'south-africa': 64,
+  zimbabwe: 18,
 }
 
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
-    s1Cam: { x: -2.9, y: -1.65, z: 8.3 },
-    s1Rot: { x: -0.16, y: lngToRotY(-4) - 0.02 },
+    s1Cam: { x: -3.05, y: 0.9, z: 8.1 },
+    s1Rot: { x: 0.08, y: lngToRotY(-34) - 0.02 },
     s2: { cam: { x: 0.02, y: 0.0, z: 3.78 }, rotX: -0.31, rotY: lngToRotY(31.8) },
     countries: [
       'Malawi',
@@ -899,7 +903,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
   const containerHeight = viewport.height
   const isMobile = containerWidth > 0 && containerWidth < 768
   const desktopCardWidth = Math.min(400, Math.max(340, containerWidth * 0.32 || 380))
-  const desktopCardHeight = 476
+  const desktopCardHeight = 484
   const desktopCardTop = anchorPos && selectedCountry
     ? Math.min(
         Math.max(
@@ -1040,7 +1044,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   }
             }
           >
-            <div className="flex min-h-[476px] max-h-[476px] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
+            <div className="flex min-h-[484px] max-h-[484px] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
               <div
                 className="relative h-32 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.04) 0%, rgba(7,17,29,0.58) 100%), url(${selectedCountry.image})` }}
@@ -1061,19 +1065,19 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   {selectedCountry.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="flex min-h-[66px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5"
+                      className="flex min-h-[68px] flex-col items-start rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5"
                     >
                       <p className="font-body text-[10px] uppercase tracking-[0.16em] text-white/45">
                         {stat.label}
                       </p>
-                      <p className="mt-1 break-words font-heading text-[13px] leading-snug text-gold">
+                      <p className="mt-1 break-words font-heading text-[14px] leading-snug text-gold md:text-[15px]">
                         {stat.value}
                       </p>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-3">
+                <div className="mt-auto grid grid-cols-2 gap-3 pt-3 pb-1">
                   <a
                     href="/give"
                     className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
@@ -1118,18 +1122,18 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   {selectedCountry.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="flex min-h-[62px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5"
+                      className="flex min-h-[64px] flex-col items-start rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5"
                     >
                       <p className="font-body text-[10px] uppercase tracking-[0.16em] text-white/45">
                         {stat.label}
                       </p>
-                      <p className="mt-1 break-words font-heading text-[12px] leading-snug text-gold">
+                      <p className="mt-1 break-words font-heading text-[13px] leading-snug text-gold">
                         {stat.value}
                       </p>
                     </div>
                   ))}
                 </div>
-                <div className="mt-auto grid grid-cols-2 gap-3">
+                <div className="mt-auto grid grid-cols-2 gap-3 pt-3 pb-1">
                   <a
                     href="/give"
                     className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"

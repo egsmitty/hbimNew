@@ -22,7 +22,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 33.7,
     image: 'https://picsum.photos/seed/hbm-stage3-malawi/900/520',
     description:
-      'Through the Bibles for Disciples program, nearly 600,000 Bibles have been distributed to faithful disciples through a network of indigenous partner churches. Hope Builders Ministries developed from The Calling received in Southern Africa in 1984 and the work in Malawi helped shape that vision.',
+      'Through Bibles for Disciples, nearly 600,000 Bibles have reached faithful disciples through indigenous partner churches. The work in Malawi helped shape the Hope Builders vision born in Southern Africa in 1984.',
     sourceNote: 'HBM About + Our Story',
     stats: [
       { label: 'Program', value: 'Bibles for Disciples' },
@@ -56,7 +56,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 29.8,
     image: 'https://picsum.photos/seed/hbm-stage3-zimbabwe/900/520',
     description:
-      'Hope Builders, in partnership with the Indigenous Church in Africa, has established 11,000 village churches with trained pastors in eight African countries since 2001. Working through local church leadership, entire congregations are being purposely discipled to maturity and the propagation of the Gospel throughout local communities.',
+      'In partnership with the Indigenous Church in Africa, Hope Builders has helped establish 11,000 village churches with trained pastors since 2001. Through local church leadership, congregations are discipled to maturity and the Gospel spreads through their communities.',
     sourceNote: 'HBM About',
     stats: [
       { label: 'Village Churches', value: '11,000' },
@@ -90,7 +90,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 34.8,
     image: 'https://picsum.photos/seed/hbm-stage3-tanzania/900/520',
     description:
-      'Working with the Indigenous Church in Africa and Asia, Hope Builders Ministries endeavors to encourage its partners by providing Bibles, training literature, transport and Dignity Projects. Multiple thousands of training manuals have been printed and delivered to train the indigenous leaders in the Word of God.',
+      'Working with the Indigenous Church in Africa and Asia, Hope Builders encourages its partners through Bibles, training literature, transport, and Dignity Projects. Thousands of training manuals have been delivered to strengthen indigenous leaders in the Word of God.',
     sourceNote: 'HBM About',
     stats: [
       { label: 'Support', value: 'Training literature' },
@@ -107,7 +107,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 37.9,
     image: 'https://picsum.photos/seed/hbm-stage3-kenya/900/520',
     description:
-      'The HBM mission is to equip the indigenous church so local leaders can make disciples and advance the Gospel in Africa and Asia. Working through local church leadership, entire congregations are being purposely discipled to maturity and the propagation of the Gospel throughout local communities.',
+      'The HBM mission is to equip the indigenous church so local leaders can make disciples and advance the Gospel in Africa and Asia. Through local church leadership, congregations are discipled to maturity and the Gospel moves through their communities.',
     sourceNote: 'HBM Three Es + About',
     stats: [
       { label: 'Mission', value: 'Equip the indigenous church' },
