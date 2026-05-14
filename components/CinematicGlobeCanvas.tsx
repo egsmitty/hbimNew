@@ -62,7 +62,7 @@ const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
     s1Cam: { x: -2.9, y: -1.65, z: 8.3 },
     s1Rot: { x: -0.16, y: lngToRotY(-4) - 0.02 },
-    s2: { cam: { x: 0.02, y: 0.0, z: 3.68 }, rotX: -0.35, rotY: lngToRotY(31.8) },
+    s2: { cam: { x: 0.02, y: 0.0, z: 3.78 }, rotX: -0.31, rotY: lngToRotY(31.8) },
     countries: [
       'Malawi',
       'Mozambique',
@@ -907,6 +907,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       ? Math.max(cardAnchorX + 34, anchorPos.x + 30)
       : Math.min(cardAnchorX - 34, anchorPos.x - 30)
     : 0
+  const showCountryCard = stage === 'country' && selectedCountry && anchorPos
 
   return (
     <div className="relative h-full w-full overflow-hidden">
@@ -940,7 +941,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         </div>
       )}
 
-      {(stage === 'continent' || stage === 'country') && (
+      {stage !== 'space' && (
         <>
           <div
             className="pointer-events-none absolute inset-0"
@@ -974,7 +975,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         </>
       )}
 
-      {selectedCountry && anchorPos && (
+      {showCountryCard && (
         <>
           {!isMobile && (
             <svg className="pointer-events-none absolute inset-0 z-20 hidden md:block">
@@ -1008,8 +1009,8 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
           )}
 
           <div
-            className={`absolute z-30 transition-all duration-500 ${
-              stage === 'country' || stage === 'transitioning'
+            className={`absolute z-30 transition-[opacity,transform] duration-300 ease-out will-change-transform ${
+              showCountryCard
                 ? 'opacity-100 translate-y-0'
                 : 'pointer-events-none opacity-0 translate-y-4'
             } ${
@@ -1027,21 +1028,11 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   }
             }
           >
-            <div className="overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
+            <div className="flex max-h-[min(540px,calc(100vh-6rem))] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
               <div
                 className="relative h-40 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.04) 0%, rgba(7,17,29,0.58) 100%), url(${selectedCountry.image})` }}
               >
-                <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4">
-                  <span className="rounded-full border border-gold/30 bg-[#050a14]/55 px-3 py-1 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-gold backdrop-blur-sm">
-                    {selectedCountry.region}
-                  </span>
-                  {selectedCountry.sourceNote && (
-                    <span className="max-w-[55%] text-right font-body text-[11px] text-white/60">
-                      {selectedCountry.sourceNote}
-                    </span>
-                  )}
-                </div>
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <h3 className="font-heading text-3xl font-bold text-white">
                     {selectedCountry.name}
@@ -1049,7 +1040,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                 </div>
               </div>
 
-              <div className="space-y-5 p-5 md:p-6">
+              <div className="min-h-0 space-y-5 overflow-y-auto p-5 md:p-6">
                 <p className="font-body text-sm leading-relaxed text-white/76">
                   {selectedCountry.description}
                 </p>
@@ -1058,12 +1049,12 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   {selectedCountry.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-3"
+                      className="flex min-h-[78px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-3"
                     >
                       <p className="font-body text-[11px] uppercase tracking-[0.16em] text-white/45">
                         {stat.label}
                       </p>
-                      <p className="mt-1 font-heading text-lg leading-tight text-gold">
+                      <p className="mt-1 break-words font-heading text-[15px] leading-snug text-gold md:text-base">
                         {stat.value}
                       </p>
                     </div>
@@ -1090,13 +1081,13 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
           </div>
 
           <div
-            className={`absolute inset-x-0 bottom-0 z-30 px-3 pb-3 transition-all duration-500 md:hidden ${
-              stage === 'country' || stage === 'transitioning'
+            className={`absolute inset-x-0 bottom-0 z-30 px-3 pb-3 transition-[opacity,transform] duration-300 ease-out will-change-transform md:hidden ${
+              showCountryCard
                 ? 'translate-y-0 opacity-100'
                 : 'pointer-events-none translate-y-6 opacity-0'
             }`}
           >
-            <div className="overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/96 shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-md">
+            <div className="flex max-h-[78vh] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/96 shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-md">
               <div
                 className="relative h-32 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.06) 0%, rgba(7,17,29,0.68) 100%), url(${selectedCountry.image})` }}
@@ -1107,7 +1098,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   </h3>
                 </div>
               </div>
-              <div className="space-y-4 p-4">
+              <div className="min-h-0 space-y-4 overflow-y-auto p-4">
                 <p className="font-body text-sm leading-relaxed text-white/76">
                   {selectedCountry.description}
                 </p>
@@ -1115,12 +1106,12 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   {selectedCountry.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-3"
+                      className="flex min-h-[72px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-3"
                     >
                       <p className="font-body text-[11px] uppercase tracking-[0.16em] text-white/45">
                         {stat.label}
                       </p>
-                      <p className="mt-1 font-heading text-base leading-tight text-gold">
+                      <p className="mt-1 break-words font-heading text-[14px] leading-snug text-gold">
                         {stat.value}
                       </p>
                     </div>
