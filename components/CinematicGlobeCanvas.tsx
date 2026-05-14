@@ -39,8 +39,8 @@ interface RegionCfg {
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
     s1Cam: { x: -2.25, y: -2.15, z: 7.0 },
-    s1Rot: { x: -0.58, y: lngToRotY(25) + 0.04 },
-    s2:    { cam: { x: -0.08, y: -0.26, z: 3.68 }, rotX: -0.82, rotY: lngToRotY(24) },
+    s1Rot: { x: -0.28, y: lngToRotY(31) + 0.02 },
+    s2:    { cam: { x: -0.06, y: -0.06, z: 3.68 }, rotX: -0.44, rotY: lngToRotY(31.5) },
     // Both spellings because the dataset uses the long form
     countries: ['Malawi', 'Mozambique', 'Zimbabwe', 'Zambia', 'United Republic of Tanzania', 'Tanzania', 'Kenya', 'Uganda', 'South Africa'],
     pins: [
@@ -56,8 +56,8 @@ const CFG: Record<'africa' | 'asia', RegionCfg> = {
   },
   asia: {
     s1Cam: { x: -2.2, y: -2.25, z: 6.95 },
-    s1Rot: { x: 0.42, y: lngToRotY(78.5) - 0.02 },
-    s2:    { cam: { x: -0.03, y: 0.12, z: 3.52 }, rotX: 0.62, rotY: lngToRotY(78.8) },
+    s1Rot: { x: 0.22, y: lngToRotY(79.5) - 0.02 },
+    s2:    { cam: { x: -0.03, y: 0.02, z: 3.52 }, rotX: 0.34, rotY: lngToRotY(79.2) },
     countries: ['India', 'Pakistan', 'Bangladesh'],
     pins: [
       { lat: 20.5, lng: 78.9, country: 'India' },
@@ -432,6 +432,14 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
     }
     renderer.domElement.addEventListener('click', handleCanvasClick)
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && currentStage === 'continent') {
+        e.preventDefault()
+        goToSpace()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
     const handleResize = () => {
       if (!mountRef.current) return
       const w = mountRef.current.clientWidth
@@ -475,6 +483,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       mounted = false
       cancelAnimationFrame(frameRef.current)
       renderer.domElement.removeEventListener('click', handleCanvasClick)
+      window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('resize', handleResize)
       gsap.killTweensOf(camera.position)
       gsap.killTweensOf(globeGroup.rotation)
@@ -520,12 +529,16 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
           />
           <button
             onClick={() => goToSpaceRef.current()}
-            className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded px-3 py-1.5 font-body text-xs font-semibold text-white/55 border border-white/20 hover:text-white hover:border-white/40 transition-colors bg-[#050a14]/60 backdrop-blur-sm"
+            className="absolute top-5 left-5 z-20 flex items-center gap-3 rounded-xl px-4 py-2.5 font-body text-sm font-semibold text-white/80 border border-white/25 hover:text-white hover:border-white/45 transition-colors bg-[#050a14]/72 backdrop-blur-sm shadow-lg shadow-black/30"
+            aria-label="Back to space view"
           >
-            <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
-              <path d="M13 5H1M1 5l4-4M1 5l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+              <path d="M15 6H1M1 6l5-5M1 6l5 5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Back
+            <span>Back</span>
+            <span className="rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-white/55">
+              Esc
+            </span>
           </button>
         </>
       )}
