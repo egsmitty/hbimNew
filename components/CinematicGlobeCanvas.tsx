@@ -31,16 +31,16 @@ interface PinCfg { lat: number; lng: number; country: string }
 interface RegionCfg {
   s1Cam: { x: number; y: number; z: number }
   s1Rot: { x: number; y: number }
-  s2:    { rotX: number; rotY: number; camZ: number }
+  s2:    { cam: { x: number; y: number; z: number }; rotX: number; rotY: number }
   countries: string[]
   pins: PinCfg[]
 }
 
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
-    s1Cam: { x: -2.0, y: -2.5, z: 7.2 },
-    s1Rot: { x: 0.45, y: lngToRotY(30) },
-    s2:    { rotX: 0.17, rotY: lngToRotY(30), camZ: 4.2 },
+    s1Cam: { x: -2.15, y: -2.35, z: 7.05 },
+    s1Rot: { x: 0.48, y: lngToRotY(32) - 0.05 },
+    s2:    { cam: { x: -0.1, y: 0.18, z: 3.82 }, rotX: 0.36, rotY: lngToRotY(33) },
     // Both spellings because the dataset uses the long form
     countries: ['Malawi', 'Mozambique', 'Zimbabwe', 'Zambia', 'United Republic of Tanzania', 'Tanzania', 'Kenya', 'Uganda', 'South Africa'],
     pins: [
@@ -55,9 +55,9 @@ const CFG: Record<'africa' | 'asia', RegionCfg> = {
     ],
   },
   asia: {
-    s1Cam: { x: 2.0, y: -2.5, z: 7.2 },
-    s1Rot: { x: -0.38, y: lngToRotY(79) },
-    s2:    { rotX: -0.35, rotY: lngToRotY(80), camZ: 4.2 },
+    s1Cam: { x: -2.1, y: -2.4, z: 7.0 },
+    s1Rot: { x: -0.34, y: lngToRotY(82) - 0.12 },
+    s2:    { cam: { x: -0.06, y: -0.14, z: 3.7 }, rotX: -0.5, rotY: lngToRotY(82) },
     countries: ['India', 'Pakistan', 'Bangladesh'],
     pins: [
       { lat: 20.5, lng: 78.9, country: 'India' },
@@ -95,20 +95,42 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
     // ── Scene ──────────────────────────────────────────────────────────────
     const scene = new THREE.Scene()
 
-    // Starfield
-    const N = 2500
-    const starPos = new Float32Array(N * 3)
-    for (let i = 0; i < N; i++) {
-      const r  = 48 + Math.random() * 22
-      const th = Math.random() * Math.PI * 2
-      const ph = Math.acos(2 * Math.random() - 1)
-      starPos[i * 3]     = r * Math.sin(ph) * Math.cos(th)
-      starPos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th)
-      starPos[i * 3 + 2] = r * Math.cos(ph)
+    // Starfield — layered sizes + brightness create a deeper night sky
+    function addStarLayer(count: number, size: number, radiusMin: number, radiusSpread: number, brightMin: number, brightSpread: number) {
+      const positions = new Float32Array(count * 3)
+      const colors = new Float32Array(count * 3)
+
+      for (let i = 0; i < count; i++) {
+        const r  = radiusMin + Math.random() * radiusSpread
+        const th = Math.random() * Math.PI * 2
+        const ph = Math.acos(2 * Math.random() - 1)
+        const brightness = brightMin + Math.random() * brightSpread
+        const blueShift = Math.random() < 0.18
+
+        positions[i * 3]     = r * Math.sin(ph) * Math.cos(th)
+        positions[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th)
+        positions[i * 3 + 2] = r * Math.cos(ph)
+
+        colors[i * 3] = brightness * (blueShift ? 0.88 : 1)
+        colors[i * 3 + 1] = brightness * (blueShift ? 0.93 : 1)
+        colors[i * 3 + 2] = brightness * (blueShift ? 1.08 : 1)
+      }
+
+      const starGeo = new THREE.BufferGeometry()
+      starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+      starGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+      scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+        size,
+        sizeAttenuation: true,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.95,
+        depthWrite: false,
+      })))
     }
-    const starGeo = new THREE.BufferGeometry()
-    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3))
-    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, sizeAttenuation: true })))
+    addStarLayer(2700, 0.022, 46, 28, 0.18, 0.4)
+    addStarLayer(900, 0.048, 48, 24, 0.35, 0.45)
+    addStarLayer(260, 0.085, 50, 20, 0.6, 0.35)
 
     // ── Camera ─────────────────────────────────────────────────────────────
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 200)
@@ -131,17 +153,31 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
     // Earth sphere
     const loader = new THREE.TextureLoader()
     const earthTex = loader.load(EARTH_URL, () => { if (mounted) setLoading(false) })
+    earthTex.colorSpace = THREE.SRGBColorSpace
     globeGroup.add(new THREE.Mesh(
       new THREE.SphereGeometry(GLOBE_RADIUS, 64, 64),
-      new THREE.MeshPhongMaterial({ map: earthTex, specular: new THREE.Color(0x111111), shininess: 8 })
+      new THREE.MeshPhongMaterial({
+        map: earthTex,
+        specular: new THREE.Color(0x4d5863),
+        shininess: 24,
+      })
     ))
 
     // Cloud layer — slightly larger, semi-transparent, rotates independently
     const cloudTex = loader.load(CLOUDS_URL)
+    cloudTex.colorSpace = THREE.SRGBColorSpace
     const cloudMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(GLOBE_RADIUS * 1.008, 48, 48),
-      new THREE.MeshPhongMaterial({ map: cloudTex, transparent: true, opacity: 0.38, depthWrite: false })
+      new THREE.SphereGeometry(GLOBE_RADIUS * 1.02, 64, 64),
+      new THREE.MeshPhongMaterial({
+        map: cloudTex,
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.42,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      })
     )
+    cloudMesh.renderOrder = 3
     globeGroup.add(cloudMesh)
 
     // Atmospheric glow — rim lighting via custom shader
@@ -176,10 +212,13 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
     ))
 
     // ── Lights ─────────────────────────────────────────────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 0.28))
-    const sunLight = new THREE.DirectionalLight(0xfffde7, 1.6)
-    sunLight.position.set(8, 6, 4)
+    scene.add(new THREE.AmbientLight(0x5e6d84, 0.12))
+    const sunLight = new THREE.DirectionalLight(0xfff0c2, 2.7)
+    sunLight.position.set(-9, 7, 5)
     scene.add(sunLight)
+    const sunGlow = new THREE.PointLight(0xffe8a6, 1.8, 40, 2)
+    sunGlow.position.copy(sunLight.position)
+    scene.add(sunGlow)
 
     // Sun glow sprite at the light source position for lens-flare feel
     const sunCanvas = document.createElement('canvas')
@@ -196,8 +235,8 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       blending: THREE.AdditiveBlending,
       transparent: true,
     }))
-    sunSprite.scale.setScalar(4.2)
-    sunSprite.position.set(9, 7, 2)
+    sunSprite.scale.set(5.6, 5.6, 1)
+    sunSprite.position.set(-10.5, 8.2, 3.2)
     scene.add(sunSprite)
 
     // ── Overlay helpers ────────────────────────────────────────────────────
@@ -253,17 +292,17 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         const normal = pos.clone().normalize()
 
         const dot = new THREE.Mesh(
-          new THREE.SphereGeometry(0.052, 10, 10),
+          new THREE.SphereGeometry(0.02, 10, 10),
           new THREE.MeshBasicMaterial({ color: goldColor })
         )
         dot.position.copy(pos)
         group.add(dot)
 
         const ringMat = new THREE.MeshBasicMaterial({
-          color: goldColor, transparent: true, opacity: 0.6, side: THREE.DoubleSide,
+          color: goldColor, transparent: true, opacity: 0.42, side: THREE.DoubleSide,
         })
-        const ring = new THREE.Mesh(new THREE.RingGeometry(0.075, 0.13, 28), ringMat)
-        ring.position.copy(normal.clone().multiplyScalar(GLOBE_RADIUS + 0.004))
+        const ring = new THREE.Mesh(new THREE.RingGeometry(0.028, 0.048, 28), ringMat)
+        ring.position.copy(normal.clone().multiplyScalar(GLOBE_RADIUS + 0.006))
         ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal)
         group.add(ring)
         newRings.push({ mesh: ring, phase: (i / cfg.pins.length) * Math.PI * 2 })
@@ -284,7 +323,13 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
 
       await new Promise<void>(resolve => {
         const tl = gsap.timeline({ onComplete: resolve })
-        tl.to(camera.position,   { x: 0, y: 0, z: cfg.s2.camZ, duration: 2.5, ease: 'power2.inOut' }, 0)
+        tl.to(camera.position,   {
+          x: cfg.s2.cam.x,
+          y: cfg.s2.cam.y,
+          z: cfg.s2.cam.z,
+          duration: 2.5,
+          ease: 'power2.inOut',
+        }, 0)
         tl.to(globeGroup.rotation, { x: cfg.s2.rotX, y: cfg.s2.rotY, duration: 2.5, ease: 'power2.inOut' }, 0)
       })
 
@@ -347,19 +392,20 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       const t = clock.getElapsedTime()
 
       // Clouds spin independently of the globe group's orientation
-      cloudMesh.rotation.y += 0.00028
+      cloudMesh.rotation.y += 0.00052
 
       // Subtle drift in Stage 1 — a few degrees over ~13s loop; gives the scene life
       if (currentStage === 'space') {
-        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(t * 0.12) * 0.028
+        globeGroup.rotation.x = cfg.s1Rot.x + Math.sin(t * 0.09) * 0.015
+        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(t * 0.12) * 0.024
       }
 
       // Pulsing pin rings
       ringAnimsRef.current.forEach(({ mesh, phase }) => {
-        const s = 1 + 0.55 * Math.sin(t * 1.8 + phase)
+        const s = 1 + 0.22 * Math.sin(t * 1.8 + phase)
         mesh.scale.setScalar(s)
         ;(mesh.material as THREE.MeshBasicMaterial).opacity =
-          0.15 + 0.5 * (0.5 + 0.5 * Math.sin(t * 1.8 + phase))
+          0.1 + 0.22 * (0.5 + 0.5 * Math.sin(t * 1.8 + phase))
       })
 
       // Always track origin — camera.position is animated by GSAP, lookAt follows each frame
@@ -378,7 +424,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       renderer.dispose()
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
     }
-  }, [region]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [region])
 
   return (
     <div className="relative w-full h-full overflow-hidden">
