@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Hero from "@/components/Hero";
-import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
 
 export const metadata: Metadata = {
@@ -164,20 +163,20 @@ export default function AboutPage() {
       />
 
       {/* Mission + Vision */}
-      <section id="mission" className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
+      <section id="mission" className="bg-[#F8F7F5] border-t border-[#C8C0B4]">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">
+              <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">
                 Our Mission
               </span>
-              <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3 leading-tight">
+              <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3 leading-tight">
                 Advancing the Gospel Through the Great Commission
               </h2>
-              <p className="font-body text-base text-text mt-6 leading-relaxed">
+              <p className="font-body text-lg text-text mt-6 leading-relaxed">
                 Hope Builders Ministries exists to equip indigenous leaders — pastors, teachers, and church planters — with the training, Bibles, and resources they need to reach their own communities with the Gospel of Jesus Christ.
               </p>
-              <p className="font-body text-base text-text mt-4 leading-relaxed">
+              <p className="font-body text-lg text-text mt-4 leading-relaxed">
                 We work in Africa, South Asia, and the United States, always through the local church, always through indigenous leadership.
               </p>
             </div>
@@ -195,72 +194,57 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* The Three E's */}
-      <section id="threeEs" className="bg-surface">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
-          <div className="text-center mb-14">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Our Approach</span>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">The Three E&rsquo;s</h2>
+      {/* What We Believe */}
+      <section id="beliefs" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
+          <div className="text-center mb-12">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">Foundation</span>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">What We Believe</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {threeEs.map((item) => (
-              <div key={item.word} className="bg-white rounded-lg p-10 border border-divider flex flex-col gap-4">
-                <div className="flex items-baseline gap-1">
-                  <span className="font-heading font-bold text-6xl text-gold/20 leading-none">{item.letter}</span>
-                </div>
-                <h3 className="font-heading font-bold text-2xl text-navy -mt-2">{item.word}</h3>
-                <p className="font-body text-base text-text leading-relaxed">{item.description}</p>
+          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
+            {beliefs.map((belief, i) => (
+              <div key={i} className="bg-white rounded-lg p-8 border border-divider flex gap-4 items-start">
+                <span className="shrink-0 w-9 h-9 rounded-full bg-gold/10 flex items-center justify-center mt-0.5">
+                  <span className="font-heading font-bold text-sm text-gold">{i + 1}</span>
+                </span>
+                <p className="font-body text-lg text-text leading-relaxed">{belief}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Vision Statement */}
-      <section className="bg-navy">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Where We Are Headed</span>
-            <blockquote className="mt-6">
-              <p className="font-heading text-xl md:text-2xl text-white italic leading-relaxed">
-                &ldquo;Hope Builders Ministries&rsquo; vision is to equip, encourage and empower Christian leaders in the Word of God, enabling them to better enlist their congregations to the Great Commission mission, making disciples in their communities and beyond as they share the Gospel of Grace and then encouraging one another to grow to maturity.&rdquo;
-              </p>
-            </blockquote>
-          </div>
-        </div>
-      </section>
-
       {/* Timeline */}
-      <section id="timeline" className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
+      <section id="timeline" className="bg-surface">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="text-center mb-14">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">History</span>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Our Journey</h2>
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">History</span>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Our Journey</h2>
           </div>
           <div className="relative max-w-2xl mx-auto">
-            <div className="absolute left-7 top-0 bottom-0 w-px bg-divider" />
+            <div className="absolute left-10 top-0 bottom-0 w-px bg-navy/20" />
             <div className="flex flex-col gap-0">
               {timeline.map((item) => (
-                <div key={item.year} className="relative pl-20 pb-10">
+                <div key={item.year} className="relative pl-28 pb-10">
                   <div className={`absolute left-0 top-0 flex items-center justify-center shrink-0 rounded-full ${
                     item.milestone
-                      ? "w-14 h-14 bg-gold"
-                      : "w-12 h-12 bg-white border-2 border-divider"
+                      ? "w-20 h-20 bg-gold"
+                      : "w-20 h-20 bg-white border-2 border-navy/20"
                   }`}>
-                    <span className={`font-heading font-bold leading-none ${
-                      item.milestone ? "text-white text-xs" : "text-navy text-[10px]"
+                    <span className={`font-heading font-bold leading-none -translate-y-0.5 ${
+                      item.milestone ? "text-white text-2xl" : "text-navy text-xl"
                     }`}>
                       {item.year}
                     </span>
                   </div>
                   <div className={`pt-2 ${item.milestone ? "pl-2" : ""}`}>
                     {item.milestone && (
-                      <span className="inline-block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-1">
+                      <span className="inline-block font-body text-sm text-gold uppercase tracking-widest font-semibold mb-1">
                         Milestone
                       </span>
                     )}
                     <p className={`font-body leading-relaxed ${
-                      item.milestone ? "text-navy font-semibold text-base" : "text-text text-sm"
+                      item.milestone ? "text-navy font-semibold text-lg" : "text-text text-base"
                     }`}>
                       {item.event}
                     </p>
@@ -272,42 +256,54 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Impact Numbers */}
-      <ImpactBar />
-
-      {/* Programs Detail */}
-      <section id="programs" className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
-          <div className="text-center mb-12">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">What We Do</span>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Programs &amp; Initiatives</h2>
+      {/* The Three E's */}
+      <section id="threeEs" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
+          <div className="text-center mb-14">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">Our Approach</span>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">The Three E&rsquo;s</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program) => (
-              <div key={program.title} className="flex flex-col gap-4 p-8 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
-                <div className="text-gold">{program.icon}</div>
-                <h3 className="font-heading font-semibold text-lg text-navy">{program.title}</h3>
-                <p className="font-body text-base text-text leading-relaxed">{program.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {threeEs.map((item) => (
+              <div key={item.word} className="bg-white rounded-lg p-10 border border-divider flex flex-col gap-5">
+                <h3 className="font-heading font-bold text-navy leading-none">
+                  <span className="font-heading font-bold italic text-[5.5rem] text-gold leading-none pr-2">{item.word[0]}</span>
+                  <span className="font-heading font-bold text-4xl md:text-5xl">{item.word.slice(1)}</span>
+                </h3>
+                <p className="font-body text-lg text-text leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* What We Believe */}
-      <section id="beliefs" className="bg-surface">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
-          <div className="text-center mb-12">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Foundation</span>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">What We Believe</h2>
+      {/* Vision Statement */}
+      <section className="bg-navy">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">Where We Are Headed</span>
+            <blockquote className="mt-8">
+              <p className="font-heading text-2xl md:text-3xl font-medium text-white italic leading-relaxed">
+                &ldquo;Hope Builders Ministries&rsquo; vision is to equip, encourage and empower Christian leaders in the Word of God, enabling them to better enlist their congregations to the Great Commission mission, making disciples in their communities and beyond as they share the Gospel of Grace and then encouraging one another to grow to maturity.&rdquo;
+              </p>
+            </blockquote>
           </div>
-          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {beliefs.map((belief, i) => (
-              <div key={i} className="bg-white rounded-lg p-7 border border-divider flex gap-4 items-start">
-                <span className="shrink-0 w-7 h-7 rounded-full bg-gold/10 flex items-center justify-center mt-0.5">
-                  <span className="font-heading font-bold text-xs text-gold">{i + 1}</span>
-                </span>
-                <p className="font-body text-base text-text leading-relaxed">{belief}</p>
+        </div>
+      </section>
+
+      {/* Programs Detail */}
+      <section id="programs" className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
+          <div className="text-center mb-12">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">What We Do</span>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Programs &amp; Initiatives</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {programs.map((program) => (
+              <div key={program.title} className="flex flex-col gap-5 p-9 bg-white border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
+                <div className="text-gold">{program.icon}</div>
+                <h3 className="font-heading font-semibold text-xl text-navy">{program.title}</h3>
+                <p className="font-body text-lg text-text leading-relaxed">{program.description}</p>
               </div>
             ))}
           </div>
@@ -315,11 +311,11 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section id="team" className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-20">
+      <section id="team" className="bg-surface">
+        <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="text-center mb-12">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">The People</span>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Our Team</h2>
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">The People</span>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Our Team</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.map((member) => (
@@ -333,10 +329,10 @@ export default function AboutPage() {
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
-                <div className="p-7 flex flex-col gap-3 flex-1">
+                <div className="p-6 flex flex-col gap-3 flex-1">
                   <div>
                     <h3 className="font-heading font-bold text-navy text-xl">{member.name}</h3>
-                    <p className="font-body text-xs text-gold uppercase tracking-widest font-semibold mt-0.5">{member.title}</p>
+                    <p className="font-body text-sm text-gold uppercase tracking-widest font-semibold mt-0.5">{member.title}</p>
                   </div>
                   <p className="font-body text-sm text-text leading-relaxed">{member.bio}</p>
                   {member.email && (

@@ -15,10 +15,10 @@ const navLinks: { label: string; href: string; dropdown?: DropdownItem[] }[] = [
     href: "/about",
     dropdown: [
       { label: "Our Mission", href: "/about#mission" },
-      { label: "The Three E's", href: "/about#threeEs" },
-      { label: "Our Journey", href: "/about#timeline" },
-      { label: "Programs", href: "/about#programs" },
       { label: "What We Believe", href: "/about#beliefs" },
+      { label: "Our Journey", href: "/about#timeline" },
+      { label: "The Three E's", href: "/about#threeEs" },
+      { label: "Programs", href: "/about#programs" },
       { label: "Our Team", href: "/about#team" },
     ],
   },
@@ -27,9 +27,8 @@ const navLinks: { label: string; href: string; dropdown?: DropdownItem[] }[] = [
     href: "/africa",
     dropdown: [
       { label: "Overview", href: "/africa#overview" },
-      { label: "Interactive Map", href: "/africa#map" },
-      { label: "Eight Nations", href: "/africa#nations" },
-      { label: "Field Reports", href: "/africa#reports" },
+      { label: "Where We Work", href: "/africa#nations" },
+      { label: "Stories & Reports", href: "/africa#reports" },
     ],
   },
   {
@@ -37,18 +36,18 @@ const navLinks: { label: string; href: string; dropdown?: DropdownItem[] }[] = [
     href: "/asia",
     dropdown: [
       { label: "Overview", href: "/asia#overview" },
-      { label: "Interactive Map", href: "/asia#map" },
-      { label: "Three Nations", href: "/asia#nations" },
-      { label: "Field Reports", href: "/asia#reports" },
+      { label: "Where We Work", href: "/asia#nations" },
+      { label: "Stories & Reports", href: "/asia#reports" },
     ],
   },
   {
     label: "Give",
     href: "/give",
     dropdown: [
-      { label: "How to Give", href: "/give#pathways" },
-      { label: "Give by Check", href: "/give#check" },
-      { label: "Donor Portal", href: "/give#trust" },
+      { label: "General Fund", href: "/give#general-fund" },
+      { label: "Give to a Project", href: "/give#project" },
+      { label: "Give to a Country", href: "/give#country" },
+      { label: "Give to a Team Member", href: "/give#team-member" },
     ],
   },
   { label: "Contact", href: "/contact" },
@@ -61,19 +60,19 @@ export default function Nav() {
 
   return (
     <header className="sticky top-0 z-50 bg-navy border-b border-white/10">
-      <div className="max-w-[1440px] mx-auto px-6 h-18 flex items-center justify-between gap-8" style={{ height: "72px" }}>
+      <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between gap-8" style={{ height: "88px" }}>
 
         {/* Logo lockup */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          <div className="w-9 h-9 rounded-sm bg-gold/15 border border-gold/30 flex items-center justify-center group-hover:bg-gold/25 transition-colors">
-            <svg viewBox="0 0 24 24" className="w-5 h-5 text-gold" fill="currentColor" aria-hidden="true">
+          <div className="w-11 h-11 rounded-sm bg-gold/15 border border-gold/30 flex items-center justify-center group-hover:bg-gold/25 transition-colors">
+            <svg viewBox="0 0 24 24" className="w-6 h-6 text-gold" fill="currentColor" aria-hidden="true">
               <rect x="10.5" y="3" width="3" height="18" rx="1" />
               <rect x="4" y="9" width="16" height="3" rx="1" />
             </svg>
           </div>
           <div className="flex flex-col leading-none">
-            <span className="font-heading text-white font-bold text-base tracking-wide">Hope Builders</span>
-            <span className="font-body text-gold text-[10px] tracking-[0.18em] uppercase mt-0.5">Ministries</span>
+            <span className="font-heading text-white font-bold text-lg tracking-wide">Hope Builders</span>
+            <span className="font-body text-gold text-xs tracking-[0.18em] uppercase mt-0.5">Ministries</span>
           </div>
         </Link>
 
@@ -85,7 +84,7 @@ export default function Nav() {
                 <Link
                   href={link.href}
                   aria-current={isActive(link.href) ? "page" : undefined}
-                  className={`font-body text-sm tracking-wide transition-colors relative pb-0.5 flex items-center gap-1 ${
+                  className={`font-body text-base tracking-wide transition-colors relative pb-0.5 flex items-center gap-1 ${
                     isActive(link.href)
                       ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gold after:rounded-full"
                       : "text-white/65 hover:text-white"
@@ -116,7 +115,7 @@ export default function Nav() {
                 key={link.href}
                 href={link.href}
                 aria-current={isActive(link.href) ? "page" : undefined}
-                className={`font-body text-sm tracking-wide transition-colors relative pb-0.5 ${
+                className={`font-body text-base tracking-wide transition-colors relative pb-0.5 ${
                   isActive(link.href)
                     ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-gold after:rounded-full"
                     : "text-white/65 hover:text-white"
@@ -132,13 +131,13 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <Link
             href="/subscribe"
-            className="font-body text-sm text-white border border-white/40 rounded-full px-4 py-1.5 hover:border-white hover:bg-white/10 transition-colors"
+            className="font-body text-sm text-white border border-white/40 rounded-full px-5 py-2.5 hover:border-white hover:bg-white/10 transition-colors"
           >
             Subscribe
           </Link>
           <Link
             href="/give"
-            className="font-body text-sm font-semibold bg-gold text-white px-5 py-2 rounded-full hover:bg-gold/90 transition-colors"
+            className="font-body text-sm font-semibold bg-gold text-white px-6 py-2.5 rounded-full hover:bg-gold/90 transition-colors"
           >
             Give Now
           </Link>

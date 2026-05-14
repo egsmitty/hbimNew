@@ -28,7 +28,7 @@ export default function Hero({
   const heightClass = tall
     ? "min-h-[620px] md:min-h-[680px]"
     : compact
-    ? "min-h-[220px] md:min-h-[260px]"
+    ? "min-h-[180px] md:min-h-[220px]"
     : "min-h-[380px] md:min-h-[460px]";
   return (
     <section className={`relative w-full flex items-end overflow-hidden ${heightClass}`}>
@@ -43,7 +43,7 @@ export default function Hero({
       <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/20" />
 
       {/* Content */}
-      <div className={`relative z-10 w-full max-w-[1440px] mx-auto px-6 ${compact ? "pb-10 pt-20" : "pb-16 pt-32"}`}>
+      <div className={`relative z-10 w-full max-w-[1440px] mx-auto px-6 ${compact ? "pb-6 pt-14" : "pb-16 pt-32"}`}>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

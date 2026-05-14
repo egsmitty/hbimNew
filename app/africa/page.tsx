@@ -3,7 +3,7 @@ import Image from "next/image";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
-import ImpactGlobe from "@/components/ImpactGlobe";
+import CinematicGlobe from "@/components/CinematicGlobe";
 
 export const metadata: Metadata = {
   title: "Africa — Hope Builders Ministries",
@@ -16,17 +16,6 @@ const africaStats = [
   { value: "11,000", label: "Village Churches" },
   { value: "25,000", label: "Trained Pastors" },
   { value: "600K+", label: "Bibles Distributed" },
-];
-
-const countries = [
-  { name: "Malawi", description: "Where the vision began. Johan Gous's exchange of 100 Bibles for one shared copy sparked the founding of HBM. Malawi remains a cornerstone of the Africa ministry." },
-  { name: "Mozambique", description: "The original focus of the Timothy Project in 1984. HBM has trained hundreds of pastors to lead churches in some of Mozambique's most remote regions." },
-  { name: "Zimbabwe", description: "Indigenous church partnerships have multiplied village congregations throughout Zimbabwe, equipped with trained pastors and native-language Bibles." },
-  { name: "Zambia", description: "HBM's work in Zambia focuses on pastor training and Disciple Makers Programs to build spiritually mature congregations." },
-  { name: "Tanzania", description: "Church planting and pastoral training continue to expand HBM's footprint across Tanzania's diverse regions." },
-  { name: "Kenya", description: "Training and resources flow through indigenous partner networks, equipping Kenyan pastors to lead and multiply their congregations." },
-  { name: "Uganda", description: "HBM supports church leadership development in Uganda, with a focus on long-term discipleship and community transformation." },
-  { name: "South Africa", description: "A strategic hub for training and resource distribution reaching into neighboring nations across Southern Africa." },
 ];
 
 const fieldReports = [
@@ -59,11 +48,11 @@ export default function AfricaPage() {
       />
 
       {/* Overview — split with large image */}
-      <section id="overview" className="bg-white">
+      <section id="overview" className="bg-[#F8F7F5] border-t border-[#C8C0B4]">
         <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">The Strategy</span>
+              <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">The Strategy</span>
               <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3 leading-tight">
                 Indigenous Leaders.<br />Local Churches.<br />Lasting Impact.
               </h2>
@@ -90,44 +79,29 @@ export default function AfricaPage() {
       {/* Africa Impact Stats */}
       <ImpactBar stats={africaStats} />
 
-      {/* 3D Interactive Globe */}
-      <section id="map" className="bg-[#0a1628]">
+      {/* Interactive Globe */}
+      <section id="map" className="bg-[#050a14]">
         <div className="max-w-[1440px] mx-auto px-6 py-16">
           <div className="mb-10 text-center">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">
               Interactive Map
             </span>
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-white mt-3">
-              Explore Where We Work
+              Where God Has Led Us
             </h2>
-            <p className="font-body text-sm text-white/50 mt-3">
-              Drag to explore &middot; Click a pin to learn more
+            <p className="font-body text-base text-white/60 mt-3">
+              Eight nations. Thousands of pastors. Hundreds of thousands of Bibles.
+            </p>
+            <p className="font-body text-sm text-white/40 mt-4 tracking-wide">
+              8 Nations &nbsp;·&nbsp; 11,000 Village Churches &nbsp;·&nbsp; 25,000 Trained Pastors &nbsp;·&nbsp; 600K+ Bibles Distributed
             </p>
           </div>
-          <ImpactGlobe region="africa" />
-        </div>
-      </section>
 
-      {/* Countries — card grid */}
-      <section id="nations" className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-24">
-          <div className="mb-14">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Where We Work</span>
-            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Eight African Nations</h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {countries.map((country, i) => (
-              <div key={country.name} className="flex gap-5 p-7 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
-                <span className="shrink-0 font-heading font-bold text-3xl text-gold/25 leading-none mt-0.5">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex flex-col gap-2">
-                  <h3 className="font-heading font-bold text-xl text-navy">{country.name}</h3>
-                  <p className="font-body text-sm text-text leading-relaxed">{country.description}</p>
-                </div>
-              </div>
-            ))}
+          <div
+            className="mx-auto max-w-[1300px] rounded-2xl border border-navy/60 overflow-hidden"
+            style={{ height: '700px', background: '#050a14' }}
+          >
+            <CinematicGlobe region="africa" />
           </div>
         </div>
       </section>
@@ -136,7 +110,7 @@ export default function AfricaPage() {
       <section id="reports" className="bg-surface">
         <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="mb-14">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">From the Field</span>
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">From the Field</span>
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Stories &amp; Reports</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -154,7 +128,7 @@ export default function AfricaPage() {
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/30 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-7">
-                    <span className="block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-2">
+                    <span className="block font-body text-sm text-gold uppercase tracking-widest font-semibold mb-2">
                       Field Report
                     </span>
                     <h3 className="font-heading font-bold text-white text-xl leading-snug mb-2">

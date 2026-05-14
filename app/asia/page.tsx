@@ -3,7 +3,7 @@ import Image from "next/image";
 import Hero from "@/components/Hero";
 import ImpactBar from "@/components/ImpactBar";
 import GiveCTA from "@/components/GiveCTA";
-import ImpactGlobe from "@/components/ImpactGlobe";
+import CinematicGlobe from "@/components/CinematicGlobe";
 
 export const metadata: Metadata = {
   title: "Asia — Hope Builders Ministries",
@@ -16,24 +16,6 @@ const asiaStats = [
   { value: "4,000+", label: "Partner Churches" },
   { value: "1,000+", label: "New Churches Planted" },
   { value: "2013", label: "Year Expansion Began" },
-];
-
-const countries = [
-  {
-    name: "India",
-    description:
-      "The largest field of HBM's Asia work. Over 4,000 partner churches receive pastor training, discipleship materials, and Bibles. New churches continue to be planted across India's diverse regions.",
-  },
-  {
-    name: "Pakistan",
-    description:
-      "In one of the world's most challenging mission fields, HBM supports indigenous believers and church leaders with training and resources to advance the Gospel with wisdom and courage.",
-  },
-  {
-    name: "Bangladesh",
-    description:
-      "HBM coordinates discipleship and church planting partnerships in Bangladesh, equipping local leaders to reach their communities with the transforming message of Christ.",
-  },
 ];
 
 const fieldReports = [
@@ -66,11 +48,11 @@ export default function AsiaPage() {
       />
 
       {/* Overview — split with large portrait image */}
-      <section id="overview" className="bg-white">
+      <section id="overview" className="bg-[#F8F7F5] border-t border-[#C8C0B4]">
         <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">The Work</span>
+              <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">The Work</span>
               <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3 leading-tight">
                 Reaching Asia<br />Through Its<br />Own People.
               </h2>
@@ -97,42 +79,29 @@ export default function AsiaPage() {
       {/* Asia Impact Stats */}
       <ImpactBar stats={asiaStats} />
 
-      {/* 3D Interactive Globe */}
-      <section id="map" className="bg-[#0a1628]">
+      {/* Interactive Globe */}
+      <section id="map" className="bg-[#050a14]">
         <div className="max-w-[1440px] mx-auto px-6 py-16">
           <div className="mb-10 text-center">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">
               Interactive Map
             </span>
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-white mt-3">
-              Explore Where We Work
+              Where God Has Led Us
             </h2>
-            <p className="font-body text-sm text-white/50 mt-3">
-              Drag to explore &middot; Click a pin to learn more
+            <p className="font-body text-base text-white/60 mt-3">
+              Three nations. Four thousand churches. One unstoppable movement.
+            </p>
+            <p className="font-body text-sm text-white/40 mt-4 tracking-wide">
+              3 Nations &nbsp;·&nbsp; 4,000+ Partner Churches &nbsp;·&nbsp; 1,000+ New Churches Planted &nbsp;·&nbsp; 2013 Expansion Began
             </p>
           </div>
-          <ImpactGlobe region="asia" />
-        </div>
-      </section>
 
-      {/* Countries — card grid */}
-      <section id="nations" className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-24">
-          <div className="mb-16">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Where We Work</span>
-            <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Three Nations</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {countries.map((country, i) => (
-              <div key={country.name} className="flex flex-col gap-3 p-7 border border-divider rounded-lg hover:border-gold/40 hover:shadow-sm transition-all">
-                <span className="font-heading font-bold text-3xl text-gold/25 leading-none">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-heading font-bold text-xl text-navy">{country.name}</h3>
-                <p className="font-body text-sm text-text leading-relaxed">{country.description}</p>
-              </div>
-            ))}
+          <div
+            className="mx-auto max-w-[1300px] rounded-2xl border border-navy/60 overflow-hidden"
+            style={{ height: '700px', background: '#050a14' }}
+          >
+            <CinematicGlobe region="asia" />
           </div>
         </div>
       </section>
@@ -141,7 +110,7 @@ export default function AsiaPage() {
       <section id="reports" className="bg-surface">
         <div className="max-w-[1440px] mx-auto px-6 py-24">
           <div className="mb-14">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">From the Field</span>
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">From the Field</span>
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-navy mt-3">Stories &amp; Reports</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -162,7 +131,7 @@ export default function AsiaPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/30 to-transparent" />
                   {/* Text overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-7">
-                    <span className="block font-body text-xs text-gold uppercase tracking-widest font-semibold mb-2">
+                    <span className="block font-body text-sm text-gold uppercase tracking-widest font-semibold mb-2">
                       Field Report
                     </span>
                     <h3 className="font-heading font-bold text-white text-xl leading-snug mb-2">
@@ -180,7 +149,7 @@ export default function AsiaPage() {
       </section>
 
       <GiveCTA
-        heading="Support the Work in Asia"
+        heading="Support the Work in South Asia"
         subtext="Your gift trains pastors and plants churches across India, Pakistan, and Bangladesh."
         buttonLabel="Give to Asia"
       />

@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 const pathways = [
   {
     title: "General Fund",
+    anchorId: "general-fund",
     description:
       "Your gift goes where it's needed most — funding pastor training, Bible distribution, and church planting across Africa and Asia.",
     impact: "Every $50 trains a pastor for one month of front-line ministry.",
@@ -23,6 +24,7 @@ const pathways = [
   },
   {
     title: "Give to a Project",
+    anchorId: "project",
     description:
       "Direct your gift to a specific initiative — Pastor Training, Bibles for Disciples, the Dignity Project, or another program close to your heart.",
     impact: "100% of your gift reaches the initiative you choose — no detours.",
@@ -35,6 +37,7 @@ const pathways = [
   },
   {
     title: "Give to a Country",
+    anchorId: "country",
     description:
       "Support the work in a specific nation — choose from any of HBM's eight African nations or three South Asian countries.",
     impact: "Plant roots in one nation — your gift stays where you send it.",
@@ -48,6 +51,7 @@ const pathways = [
   },
   {
     title: "Give to a Team Member",
+    anchorId: "team-member",
     description:
       "Support an HBM team member directly — funding their ministry and the work they're doing on the ground.",
     impact: "Sustain a person, not just a program — real relationships, real impact.",
@@ -72,10 +76,10 @@ export default function GivePage() {
       />
 
       {/* Giving Pathways */}
-      <section id="pathways" className="bg-white">
+      <section id="pathways" className="bg-[#F8F7F5] border-t border-[#C8C0B4]">
         <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="text-center mb-12">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">How to Give</span>
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">How to Give</span>
             <h2 className="font-heading font-bold text-3xl md:text-4xl text-navy mt-3">Choose Your Giving Path</h2>
             <p className="font-body text-text mt-4 max-w-xl mx-auto leading-relaxed">
               Whether you want to give broadly or direct your gift to a specific place or purpose, we make it easy.
@@ -85,6 +89,7 @@ export default function GivePage() {
             {pathways.map((pathway) => (
               <a
                 key={pathway.title}
+                id={pathway.anchorId}
                 href={pathway.href}
                 className="group flex flex-col gap-5 p-8 border border-divider rounded-lg hover:border-gold hover:shadow-md transition-all"
               >

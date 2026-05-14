@@ -24,7 +24,7 @@ const labelConfig: Record<string, { anchor: "start" | "end"; dx: number }> = {
 export default function AfricaMap() {
   return (
     <div className="bg-navy rounded-xl overflow-hidden p-6 flex flex-col gap-3">
-      <p className="font-body text-xs text-gold uppercase tracking-widest font-semibold text-center">
+      <p className="font-body text-sm text-gold uppercase tracking-widest font-semibold text-center">
         HBM Partner Nations
       </p>
       <svg

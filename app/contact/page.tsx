@@ -22,8 +22,8 @@ export default function ContactPage() {
     <>
       {/* Hero */}
       <section className="bg-navy text-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20 text-center">
-          <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">Get In Touch</span>
+        <div className="max-w-[1440px] mx-auto px-6 py-20 text-center">
+          <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">Get In Touch</span>
           <h1 className="font-heading font-bold text-4xl md:text-5xl mt-3 leading-tight">
             We&apos;d Love to Hear From You
           </h1>
@@ -34,8 +34,8 @@ export default function ContactPage() {
       </section>
 
       {/* Two-column layout */}
-      <section className="bg-white">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
+      <section className="bg-[#F8F7F5] border-t border-[#C8C0B4]">
+        <div className="max-w-[1440px] mx-auto px-6 py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 
             {/* Form */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Hero from "@/components/Hero";
+import Image from "next/image";
 
 // Note: wire form submission to your email platform before deploying.
 // Options: Mailchimp embed, ConvertKit, or a Next.js API route.
@@ -52,69 +52,93 @@ export default function SubscribePage() {
 
   return (
     <>
-      <Hero
-        compact
-        title="Stories From the Field"
-        subtitle="Real updates from Africa and Asia — straight to your inbox."
-        imageSrc="https://picsum.photos/seed/hbm-subscribe/1920/1080"
-        imageAlt="Community gathered in worship in rural Africa"
-      />
+      {/* Unified hero + form — single section, gradient dissolves into surface */}
+      <section className="relative overflow-hidden min-h-[580px] md:min-h-[640px]">
+        <Image
+          src="https://picsum.photos/seed/hbm-subscribe/1920/1080"
+          alt="Community gathered in worship in rural Africa"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        {/* Gradient: dark navy at top → transparent mid → solid surface at bottom */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(25,53,94,0.95) 0%, rgba(25,53,94,0.88) 35%, rgba(25,53,94,0.45) 65%, #eeeeee 100%)",
+          }}
+        />
 
-      {/* Email form — immediately below hero */}
-      <section className="bg-surface">
-        <div className="max-w-[560px] mx-auto px-6 py-20 text-center">
-          {submitted ? (
-            <div className="flex flex-col items-center gap-5">
-              <svg className="w-14 h-14 text-gold" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <h2 className="font-heading font-bold text-2xl text-navy">You&apos;re Subscribed</h2>
-              <p className="font-body text-text leading-relaxed">
-                Thank you for joining the HBM community. Expect stories, updates, and prayer requests from the field.
+        <div className="relative z-10 max-w-[1440px] mx-auto px-6 pt-20 pb-10 flex flex-col items-center">
+          {/* Combined headline + form box */}
+          <div className="w-full max-w-[1100px] border border-white/20 rounded-2xl bg-white/5 backdrop-blur-sm px-10 md:px-16 py-12 flex flex-col items-center gap-0">
+            {/* Headline */}
+            <div className="text-center w-full">
+              <h1 className="font-heading font-bold text-white text-3xl sm:text-4xl md:text-5xl leading-[1.1] tracking-tight">
+                Stories From the Field
+              </h1>
+              <p className="font-body text-lg text-white/80 mt-5 leading-relaxed">
+                Real updates from Africa and Asia — straight to your inbox.
               </p>
             </div>
-          ) : (
-            <>
-              <h2 className="font-heading font-bold text-2xl text-navy mb-2">Join the Community</h2>
-              <p className="font-body text-text mb-8 leading-relaxed">
-                No spam. No clutter. Just real updates from real ministry — straight to your inbox.
-              </p>
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email address"
-                  className="flex-1 font-body text-sm border border-divider rounded px-4 py-3 text-foreground bg-white focus:outline-none focus:border-navy transition-colors"
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="font-body font-semibold text-sm bg-gold text-white px-8 py-3 rounded hover:bg-gold/90 disabled:opacity-60 transition-colors whitespace-nowrap"
-                >
-                  {loading ? "Subscribing..." : "Subscribe"}
-                </button>
-              </form>
-              <p className="font-body text-xs text-text-muted mt-4">
-                You can unsubscribe at any time. We respect your inbox.
-              </p>
-            </>
-          )}
+
+            <div className="w-full border-t border-white/15 my-10" />
+
+            {/* Form */}
+            {submitted ? (
+              <div className="flex flex-col gap-4 w-full max-w-[520px] bg-white rounded-2xl shadow-xl p-8">
+                <svg className="w-12 h-12 text-gold" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <h2 className="font-heading font-bold text-2xl text-navy">You&apos;re Subscribed</h2>
+                <p className="font-body text-text leading-relaxed">
+                  Thank you for joining the HBM community. Expect stories, updates, and prayer requests from the field.
+                </p>
+              </div>
+            ) : (
+              <div className="w-full max-w-[520px] bg-white rounded-2xl shadow-xl p-8">
+                <p className="font-body text-sm text-gold uppercase tracking-widest font-semibold mb-5">
+                  Join the Community
+                </p>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Your email address"
+                    className="w-full font-body text-sm border border-divider rounded-full px-5 py-3 text-foreground bg-white focus:outline-none focus:border-navy transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full font-body font-semibold text-sm bg-gold text-white px-8 py-3 rounded-full hover:bg-gold/90 disabled:opacity-60 transition-colors"
+                  >
+                    {loading ? "Subscribing..." : "Subscribe"}
+                  </button>
+                </form>
+                <p className="font-body text-xs text-text-muted mt-4">
+                  You can unsubscribe at any time. We respect your inbox.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* What you'll receive — benefit cards below form */}
-      <section className="bg-white border-t border-divider">
-        <div className="max-w-[1440px] mx-auto px-6 py-16">
-          <div className="text-center mb-10">
-            <span className="font-body text-xs text-gold uppercase tracking-widest font-semibold">What You&apos;ll Receive</span>
+      {/* Benefit cards — same surface bg, no visible seam */}
+      <section className="bg-[#eeeeee] pt-8 pb-16">
+        <div className="max-w-[1440px] mx-auto px-6">
+          <div className="text-center mb-8">
+            <span className="font-body text-sm text-gold uppercase tracking-widest font-semibold">What You&apos;ll Receive</span>
             <h2 className="font-heading font-bold text-3xl text-navy mt-3">Stay Connected to the Work</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {benefits.map((item) => (
-              <div key={item.label} className="flex flex-col items-center text-center gap-4 p-8 border border-divider rounded-lg">
+              <div key={item.label} className="flex flex-col items-center text-center gap-4 p-8 bg-white border border-divider rounded-lg">
                 <div className="w-14 h-14 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
                   {item.icon}
                 </div>

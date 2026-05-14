@@ -1,0 +1,431 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import * as THREE from 'three'
+import { gsap } from 'gsap'
+
+const GLOBE_RADIUS = 2
+const GOLD = 0xc8973a
+const EARTH_URL = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
+const CLOUDS_URL = 'https://unpkg.com/three-globe/example/img/earth-clouds.png'
+const GEOJSON_URL = 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'
+
+// Module-level cache — survives hot reload, avoids re-fetching on every mount
+let geojsonCache: unknown = null
+
+function lngToRotY(lng: number) {
+  return -(lng + 90) * (Math.PI / 180)
+}
+
+function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
+  const phi = (90 - lat) * (Math.PI / 180)
+  const theta = (lng + 180) * (Math.PI / 180)
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+     r * Math.cos(phi),
+     r * Math.sin(phi) * Math.sin(theta)
+  )
+}
+
+interface PinCfg { lat: number; lng: number; country: string }
+interface RegionCfg {
+  s1Cam: { x: number; y: number; z: number }
+  s1Rot: { x: number; y: number }
+  s2:    { rotX: number; rotY: number; camZ: number }
+  countries: string[]
+  pins: PinCfg[]
+}
+
+const CFG: Record<'africa' | 'asia', RegionCfg> = {
+  africa: {
+    s1Cam: { x: -2.0, y: -2.5, z: 7.2 },
+    s1Rot: { x: 0.45, y: lngToRotY(30) },
+    s2:    { rotX: 0.17, rotY: lngToRotY(30), camZ: 4.2 },
+    // Both spellings because the dataset uses the long form
+    countries: ['Malawi', 'Mozambique', 'Zimbabwe', 'Zambia', 'United Republic of Tanzania', 'Tanzania', 'Kenya', 'Uganda', 'South Africa'],
+    pins: [
+      { lat: -13.9, lng: 33.7, country: 'Malawi' },
+      { lat: -18.6, lng: 35.5, country: 'Mozambique' },
+      { lat: -19.0, lng: 29.8, country: 'Zimbabwe' },
+      { lat: -13.1, lng: 27.8, country: 'Zambia' },
+      { lat:  -6.3, lng: 34.8, country: 'Tanzania' },
+      { lat: -0.02, lng: 37.9, country: 'Kenya' },
+      { lat:  1.37, lng: 32.2, country: 'Uganda' },
+      { lat: -30.5, lng: 22.9, country: 'South Africa' },
+    ],
+  },
+  asia: {
+    s1Cam: { x: 2.0, y: -2.5, z: 7.2 },
+    s1Rot: { x: -0.38, y: lngToRotY(79) },
+    s2:    { rotX: -0.35, rotY: lngToRotY(80), camZ: 4.2 },
+    countries: ['India', 'Pakistan', 'Bangladesh'],
+    pins: [
+      { lat: 20.5, lng: 78.9, country: 'India' },
+      { lat: 30.3, lng: 69.3, country: 'Pakistan' },
+      { lat: 23.6, lng: 90.3, country: 'Bangladesh' },
+    ],
+  },
+}
+
+export interface CinematicGlobeCanvasProps {
+  region: 'africa' | 'asia'
+}
+
+export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasProps) {
+  const mountRef      = useRef<HTMLDivElement>(null)
+  const frameRef      = useRef(0)
+  // Refs so React overlay buttons can call functions defined inside the effect closure
+  const goToContiRef  = useRef<() => void>(() => {})
+  const goToSpaceRef  = useRef<() => void>(() => {})
+  // Updated every frame by the effect — rings are added/removed dynamically
+  const ringAnimsRef  = useRef<Array<{ mesh: THREE.Mesh; phase: number }>>([])
+
+  const [loading, setLoading] = useState(true)
+  const [stage,   setStage]   = useState<'space' | 'transitioning' | 'continent'>('space')
+
+  useEffect(() => {
+    const container = mountRef.current
+    if (!container) return
+    const cfg = CFG[region]
+
+    let mounted = true
+    // Closure variable mirrors React state — avoids stale closure in async functions
+    let currentStage: 'space' | 'transitioning' | 'continent' = 'space'
+
+    // ── Scene ──────────────────────────────────────────────────────────────
+    const scene = new THREE.Scene()
+
+    // Starfield
+    const N = 2500
+    const starPos = new Float32Array(N * 3)
+    for (let i = 0; i < N; i++) {
+      const r  = 48 + Math.random() * 22
+      const th = Math.random() * Math.PI * 2
+      const ph = Math.acos(2 * Math.random() - 1)
+      starPos[i * 3]     = r * Math.sin(ph) * Math.cos(th)
+      starPos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th)
+      starPos[i * 3 + 2] = r * Math.cos(ph)
+    }
+    const starGeo = new THREE.BufferGeometry()
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3))
+    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, sizeAttenuation: true })))
+
+    // ── Camera ─────────────────────────────────────────────────────────────
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 200)
+    camera.position.set(cfg.s1Cam.x, cfg.s1Cam.y, cfg.s1Cam.z)
+    camera.lookAt(0, 0, 0)
+
+    // ── Renderer ───────────────────────────────────────────────────────────
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+    renderer.setSize(container.clientWidth, container.clientHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setClearColor(0x050a14, 1)
+    container.appendChild(renderer.domElement)
+    renderer.domElement.style.cursor = 'pointer'
+
+    // ── Globe group ────────────────────────────────────────────────────────
+    const globeGroup = new THREE.Group()
+    globeGroup.rotation.set(cfg.s1Rot.x, cfg.s1Rot.y, 0)
+    scene.add(globeGroup)
+
+    // Earth sphere
+    const loader = new THREE.TextureLoader()
+    const earthTex = loader.load(EARTH_URL, () => { if (mounted) setLoading(false) })
+    globeGroup.add(new THREE.Mesh(
+      new THREE.SphereGeometry(GLOBE_RADIUS, 64, 64),
+      new THREE.MeshPhongMaterial({ map: earthTex, specular: new THREE.Color(0x111111), shininess: 8 })
+    ))
+
+    // Cloud layer — slightly larger, semi-transparent, rotates independently
+    const cloudTex = loader.load(CLOUDS_URL)
+    const cloudMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(GLOBE_RADIUS * 1.008, 48, 48),
+      new THREE.MeshPhongMaterial({ map: cloudTex, transparent: true, opacity: 0.38, depthWrite: false })
+    )
+    globeGroup.add(cloudMesh)
+
+    // Atmospheric glow — rim lighting via custom shader
+    const atmVert = `
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      void main() {
+        vNormal  = normalize(normalMatrix * normal);
+        vViewDir = normalize(-vec3(modelViewMatrix * vec4(position, 1.0)));
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `
+    const atmFrag = `
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      void main() {
+        float rim       = 1.0 - clamp(dot(vNormal, vViewDir), 0.0, 1.0);
+        float intensity = pow(rim, 4.0) * 0.72;
+        gl_FragColor    = vec4(0.25, 0.55, 1.0, intensity);
+      }
+    `
+    globeGroup.add(new THREE.Mesh(
+      new THREE.SphereGeometry(GLOBE_RADIUS * 1.14, 32, 32),
+      new THREE.ShaderMaterial({
+        vertexShader: atmVert,
+        fragmentShader: atmFrag,
+        blending: THREE.AdditiveBlending,
+        side: THREE.FrontSide,
+        transparent: true,
+        depthWrite: false,
+      })
+    ))
+
+    // ── Lights ─────────────────────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.28))
+    const sunLight = new THREE.DirectionalLight(0xfffde7, 1.6)
+    sunLight.position.set(8, 6, 4)
+    scene.add(sunLight)
+
+    // Sun glow sprite at the light source position for lens-flare feel
+    const sunCanvas = document.createElement('canvas')
+    sunCanvas.width = sunCanvas.height = 128
+    const sctx = sunCanvas.getContext('2d')!
+    const grd = sctx.createRadialGradient(64, 64, 0, 64, 64, 64)
+    grd.addColorStop(0,    'rgba(255,250,220,0.95)')
+    grd.addColorStop(0.25, 'rgba(255,230,140,0.55)')
+    grd.addColorStop(1,    'rgba(255,200,80,0)')
+    sctx.fillStyle = grd
+    sctx.fillRect(0, 0, 128, 128)
+    const sunSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: new THREE.CanvasTexture(sunCanvas),
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+    }))
+    sunSprite.scale.setScalar(4.2)
+    sunSprite.position.set(9, 7, 2)
+    scene.add(sunSprite)
+
+    // ── Overlay helpers ────────────────────────────────────────────────────
+    let overlayGroup: THREE.Group | null = null
+
+    async function buildOverlay(): Promise<THREE.Group> {
+      if (!geojsonCache) {
+        const res = await fetch(GEOJSON_URL)
+        geojsonCache = await res.json()
+      }
+      type Feature = {
+        properties: Record<string, string>
+        geometry: { type: string; coordinates: unknown }
+      }
+      const data = geojsonCache as { features: Feature[] }
+      const group  = new THREE.Group()
+      const hbmSet = new Set(cfg.countries.map(s => s.toLowerCase()))
+
+      for (const feat of data.features) {
+        const name = (feat.properties.ADMIN ?? feat.properties.name ?? '').toLowerCase()
+        if (!hbmSet.has(name)) continue
+
+        const geom = feat.geometry
+        let rings: number[][][]
+        if (geom.type === 'Polygon') {
+          rings = geom.coordinates as number[][][]
+        } else if (geom.type === 'MultiPolygon') {
+          rings = (geom.coordinates as number[][][][]).flat()
+        } else {
+          continue
+        }
+
+        for (const ring of rings) {
+          // Project GeoJSON [lng, lat] pairs onto globe surface with tiny offset to avoid z-fighting
+          const pts = (ring as [number, number][]).map(([lng, lat]) =>
+            latLngToVec3(lat, lng, GLOBE_RADIUS * 1.002)
+          )
+          if (pts.length < 2) continue
+          pts.push(pts[0]) // close the loop
+          const geo = new THREE.BufferGeometry().setFromPoints(pts)
+          group.add(new THREE.Line(geo, new THREE.LineBasicMaterial({
+            color: GOLD, transparent: true, opacity: 0.88,
+          })))
+        }
+      }
+
+      // Pulsing gold pins
+      const goldColor = new THREE.Color(GOLD)
+      const newRings: Array<{ mesh: THREE.Mesh; phase: number }> = []
+
+      cfg.pins.forEach((pin, i) => {
+        const pos    = latLngToVec3(pin.lat, pin.lng, GLOBE_RADIUS)
+        const normal = pos.clone().normalize()
+
+        const dot = new THREE.Mesh(
+          new THREE.SphereGeometry(0.052, 10, 10),
+          new THREE.MeshBasicMaterial({ color: goldColor })
+        )
+        dot.position.copy(pos)
+        group.add(dot)
+
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: goldColor, transparent: true, opacity: 0.6, side: THREE.DoubleSide,
+        })
+        const ring = new THREE.Mesh(new THREE.RingGeometry(0.075, 0.13, 28), ringMat)
+        ring.position.copy(normal.clone().multiplyScalar(GLOBE_RADIUS + 0.004))
+        ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal)
+        group.add(ring)
+        newRings.push({ mesh: ring, phase: (i / cfg.pins.length) * Math.PI * 2 })
+      })
+
+      ringAnimsRef.current = newRings
+      return group
+    }
+
+    // ── Stage transitions ──────────────────────────────────────────────────
+    async function goToContinent() {
+      if (currentStage !== 'space') return
+      currentStage = 'transitioning'
+      setStage('transitioning')
+
+      // Fetch GeoJSON concurrently with the camera animation so both finish around the same time
+      const overlayPromise = buildOverlay()
+
+      await new Promise<void>(resolve => {
+        const tl = gsap.timeline({ onComplete: resolve })
+        tl.to(camera.position,   { x: 0, y: 0, z: cfg.s2.camZ, duration: 2.5, ease: 'power2.inOut' }, 0)
+        tl.to(globeGroup.rotation, { x: cfg.s2.rotX, y: cfg.s2.rotY, duration: 2.5, ease: 'power2.inOut' }, 0)
+      })
+
+      if (!mounted) return
+      currentStage = 'continent'
+      setStage('continent')
+
+      const overlay = await overlayPromise
+      if (!mounted) return
+      overlayGroup = overlay
+      globeGroup.add(overlay)
+    }
+
+    async function goToSpace() {
+      if (currentStage !== 'continent') return
+      currentStage = 'transitioning'
+      setStage('transitioning')
+
+      // Remove overlay before animating so it doesn't trail back visually
+      if (overlayGroup) {
+        globeGroup.remove(overlayGroup)
+        overlayGroup = null
+        ringAnimsRef.current = []
+      }
+
+      await new Promise<void>(resolve => {
+        const tl = gsap.timeline({ onComplete: resolve })
+        tl.to(camera.position,     { x: cfg.s1Cam.x, y: cfg.s1Cam.y, z: cfg.s1Cam.z, duration: 2.2, ease: 'power2.inOut' }, 0)
+        tl.to(globeGroup.rotation, { x: cfg.s1Rot.x, y: cfg.s1Rot.y, duration: 2.2, ease: 'power2.inOut' }, 0)
+      })
+
+      if (!mounted) return
+      currentStage = 'space'
+      setStage('space')
+    }
+
+    goToContiRef.current = goToContinent
+    goToSpaceRef.current = goToSpace
+
+    // ── Event listeners ────────────────────────────────────────────────────
+    const handleCanvasClick = () => {
+      if (currentStage === 'space') goToContinent()
+    }
+    renderer.domElement.addEventListener('click', handleCanvasClick)
+
+    const handleResize = () => {
+      if (!mountRef.current) return
+      const w = mountRef.current.clientWidth
+      const h = mountRef.current.clientHeight
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
+      renderer.setSize(w, h)
+    }
+    window.addEventListener('resize', handleResize)
+
+    // ── Render loop ────────────────────────────────────────────────────────
+    const clock = new THREE.Clock()
+    function animate() {
+      frameRef.current = requestAnimationFrame(animate)
+      const t = clock.getElapsedTime()
+
+      // Clouds spin independently of the globe group's orientation
+      cloudMesh.rotation.y += 0.00028
+
+      // Subtle drift in Stage 1 — a few degrees over ~13s loop; gives the scene life
+      if (currentStage === 'space') {
+        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(t * 0.12) * 0.028
+      }
+
+      // Pulsing pin rings
+      ringAnimsRef.current.forEach(({ mesh, phase }) => {
+        const s = 1 + 0.55 * Math.sin(t * 1.8 + phase)
+        mesh.scale.setScalar(s)
+        ;(mesh.material as THREE.MeshBasicMaterial).opacity =
+          0.15 + 0.5 * (0.5 + 0.5 * Math.sin(t * 1.8 + phase))
+      })
+
+      // Always track origin — camera.position is animated by GSAP, lookAt follows each frame
+      camera.lookAt(0, 0, 0)
+      renderer.render(scene, camera)
+    }
+    animate()
+
+    return () => {
+      mounted = false
+      cancelAnimationFrame(frameRef.current)
+      renderer.domElement.removeEventListener('click', handleCanvasClick)
+      window.removeEventListener('resize', handleResize)
+      gsap.killTweensOf(camera.position)
+      gsap.killTweensOf(globeGroup.rotation)
+      renderer.dispose()
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
+    }
+  }, [region]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Loading spinner — shown until Earth texture resolves */}
+      {loading && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#050a14]">
+          <div className="h-10 w-10 rounded-full border-2 border-[#C8973A]/25 border-t-[#C8973A] animate-spin" />
+        </div>
+      )}
+
+      <div ref={mountRef} className="w-full h-full" />
+
+      {/* Stage 1 — explore prompt */}
+      {stage === 'space' && !loading && (
+        <div className="absolute inset-x-0 bottom-8 flex justify-center pointer-events-none">
+          <button
+            className="pointer-events-auto flex flex-col items-center gap-2 text-white/35 hover:text-white/65 transition-colors duration-300"
+            onClick={() => goToContiRef.current()}
+          >
+            <span className="font-body text-[11px] font-semibold uppercase tracking-[0.22em]">
+              Explore the Mission
+            </span>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 1l7 7 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {/* Stage 2 — dark edge vignette + back button */}
+      {stage === 'continent' && (
+        <>
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse at center, transparent 38%, rgba(5,10,20,0.9) 100%)' }}
+          />
+          <button
+            onClick={() => goToSpaceRef.current()}
+            className="absolute top-4 left-4 z-20 flex items-center gap-2 rounded px-3 py-1.5 font-body text-xs font-semibold text-white/55 border border-white/20 hover:text-white hover:border-white/40 transition-colors bg-[#050a14]/60 backdrop-blur-sm"
+          >
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+              <path d="M13 5H1M1 5l4-4M1 5l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Back
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
