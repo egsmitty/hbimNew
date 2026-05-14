@@ -10,7 +10,7 @@ interface GiveCTAProps {
 
 export default function GiveCTA({
   heading = "Partner With Us",
-  subtext = "Every gift advances the Gospel — equipping pastors, distributing Bibles, and planting churches in Africa and Asia.",
+  subtext = "Every gift advances the Gospel by equipping pastors, distributing Bibles, and planting churches across Africa and Asia.",
   buttonLabel = "Give Now",
   href = "/give",
   showTrustLine = true,
