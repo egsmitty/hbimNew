@@ -39,8 +39,8 @@ interface RegionCfg {
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
     s1Cam: { x: -2.25, y: -2.15, z: 7.0 },
-    s1Rot: { x: 0.66, y: lngToRotY(33) - 0.06 },
-    s2:    { cam: { x: -0.04, y: 0.26, z: 3.76 }, rotX: 0.56, rotY: lngToRotY(32.5) },
+    s1Rot: { x: -0.58, y: lngToRotY(25) + 0.04 },
+    s2:    { cam: { x: -0.08, y: -0.26, z: 3.68 }, rotX: -0.82, rotY: lngToRotY(24) },
     // Both spellings because the dataset uses the long form
     countries: ['Malawi', 'Mozambique', 'Zimbabwe', 'Zambia', 'United Republic of Tanzania', 'Tanzania', 'Kenya', 'Uganda', 'South Africa'],
     pins: [
@@ -56,8 +56,8 @@ const CFG: Record<'africa' | 'asia', RegionCfg> = {
   },
   asia: {
     s1Cam: { x: -2.2, y: -2.25, z: 6.95 },
-    s1Rot: { x: -0.58, y: lngToRotY(83.5) - 0.08 },
-    s2:    { cam: { x: -0.02, y: -0.22, z: 3.6 }, rotX: -0.74, rotY: lngToRotY(82.5) },
+    s1Rot: { x: 0.42, y: lngToRotY(78.5) - 0.02 },
+    s2:    { cam: { x: -0.03, y: 0.12, z: 3.52 }, rotX: 0.62, rotY: lngToRotY(78.8) },
     countries: ['India', 'Pakistan', 'Bangladesh'],
     pins: [
       { lat: 20.5, lng: 78.9, country: 'India' },
@@ -128,10 +128,11 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         depthWrite: false,
       })))
     }
-    addStarLayer(3400, 0.016, 46, 30, 0.1, 0.28)
-    addStarLayer(1200, 0.036, 48, 26, 0.22, 0.35)
-    addStarLayer(420, 0.064, 50, 22, 0.42, 0.34)
-    addStarLayer(120, 0.108, 52, 18, 0.68, 0.26)
+    addStarLayer(3600, 0.016, 46, 30, 0.1, 0.28)
+    addStarLayer(1350, 0.038, 48, 26, 0.22, 0.35)
+    addStarLayer(520, 0.074, 50, 22, 0.42, 0.34)
+    addStarLayer(160, 0.13, 52, 18, 0.72, 0.24)
+    addStarLayer(28, 0.22, 55, 14, 0.92, 0.08)
 
     // ── Camera ─────────────────────────────────────────────────────────────
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 200)
@@ -173,10 +174,10 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         map: cloudTex,
         color: 0xffffff,
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.58,
         depthWrite: false,
         side: THREE.DoubleSide,
-        shininess: 8,
+        shininess: 14,
       })
     )
     cloudMesh.renderOrder = 3
@@ -268,12 +269,32 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       map: rayTexture,
       blending: THREE.AdditiveBlending,
       transparent: true,
-      opacity: 0.72,
+      opacity: 0.8,
       depthWrite: false,
     }))
-    sunRaySprite.scale.set(18, 18, 1)
-    sunRaySprite.position.set(-12.8, 10.4, 2.7)
+    sunRaySprite.scale.set(22, 22, 1)
+    sunRaySprite.position.set(-13.4, 10.9, 2.7)
     scene.add(sunRaySprite)
+
+    const haloCanvas = document.createElement('canvas')
+    haloCanvas.width = haloCanvas.height = 256
+    const hctx = haloCanvas.getContext('2d')!
+    const haloGrad = hctx.createRadialGradient(128, 128, 0, 128, 128, 128)
+    haloGrad.addColorStop(0, 'rgba(255,245,215,0.45)')
+    haloGrad.addColorStop(0.3, 'rgba(255,220,130,0.18)')
+    haloGrad.addColorStop(1, 'rgba(255,220,130,0)')
+    hctx.fillStyle = haloGrad
+    hctx.fillRect(0, 0, 256, 256)
+    const haloSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: new THREE.CanvasTexture(haloCanvas),
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      opacity: 0.85,
+      depthWrite: false,
+    }))
+    haloSprite.scale.set(11, 11, 1)
+    haloSprite.position.set(-11.9, 9.6, 3.2)
+    scene.add(haloSprite)
 
     // ── Overlay helpers ────────────────────────────────────────────────────
     let overlayGroup: THREE.Group | null = null
@@ -428,7 +449,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       const t = clock.getElapsedTime()
 
       // Clouds spin independently of the globe group's orientation
-      cloudMesh.rotation.y += 0.00062
+      cloudMesh.rotation.y += 0.00072
 
       // Subtle drift in Stage 1 — a few degrees over ~13s loop; gives the scene life
       if (currentStage === 'space') {

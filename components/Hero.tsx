@@ -13,6 +13,7 @@ interface HeroProps {
   imageAlt?: string;
   tall?: boolean;
   compact?: boolean;
+  roomy?: boolean;
 }
 
 export default function Hero({
@@ -24,14 +25,17 @@ export default function Hero({
   imageAlt = "",
   tall = false,
   compact = false,
+  roomy = false,
 }: HeroProps) {
   const heightClass = tall
     ? "min-h-[620px] md:min-h-[680px]"
+    : roomy
+    ? "min-h-[260px] md:min-h-[320px]"
     : compact
     ? "min-h-[180px] md:min-h-[220px]"
     : "min-h-[380px] md:min-h-[460px]";
   return (
-    <section className={`relative w-full flex items-end overflow-hidden ${heightClass}`}>
+    <section className={`relative w-full flex items-end overflow-hidden border-t-2 border-gold/60 ${heightClass}`}>
       {/* Background */}
       {imageSrc ? (
         <Image src={imageSrc} alt={imageAlt} fill className="object-cover" priority sizes="100vw" />
@@ -43,7 +47,9 @@ export default function Hero({
       <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/20" />
 
       {/* Content */}
-      <div className={`relative z-10 w-full max-w-[1440px] mx-auto px-6 ${compact ? "pb-6 pt-14" : "pb-16 pt-32"}`}>
+      <div className={`relative z-10 w-full max-w-[1440px] mx-auto px-6 ${
+        compact ? "pb-6 pt-14" : roomy ? "pb-10 pt-22 md:pt-28" : "pb-16 pt-32"
+      }`}>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

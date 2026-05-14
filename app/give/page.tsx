@@ -68,7 +68,7 @@ export default function GivePage() {
   return (
     <>
       <Hero
-        compact
+        roomy
         title="Your Gift Advances the Gospel"
         subtitle="Every dollar equips an indigenous pastor, places a Bible in someone's hands, or helps plant a village church."
         imageSrc="https://picsum.photos/seed/hbm-give/1920/1080"

@@ -93,7 +93,7 @@ export default function AsiaPage() {
               Three nations. Four thousand churches. One unstoppable movement.
             </p>
             <p className="font-body text-sm text-white/40 mt-4 tracking-wide">
-              3 Nations &nbsp;·&nbsp; 4,000+ Partner Churches &nbsp;·&nbsp; 1,000+ New Churches Planted &nbsp;·&nbsp; 2013 Expansion Began
+              3 Nations &nbsp;·&nbsp; 4,000+ Partner Churches &nbsp;·&nbsp; 1,000+ New Churches Planted &nbsp;·&nbsp; Indigenous Leaders Equipped
             </p>
           </div>
 
