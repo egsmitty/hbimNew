@@ -141,7 +141,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 22.9,
     image: 'https://picsum.photos/seed/hbm-stage3-southafrica/900/520',
     description:
-      'Hope Builders Ministries developed from The Calling received by four men working with Open Doors in Southern Africa in 1984. The local church is the best mission agency, sending out their people into the local fields that are ready to harvest.',
+      'Hope Builders Ministries developed from The Calling received by four men working with Open Doors in Southern Africa in 1984. The local church is the best mission agency, sending out their people into local fields ready to harvest.',
     sourceNote: 'HBM Our Story + Three Es',
     stats: [
       { label: 'Origin', value: 'The Calling (1984)' },
@@ -158,7 +158,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 78.9,
     image: 'https://picsum.photos/seed/hbm-stage3-india/900/520',
     description:
-      'In 2013 Hope Builders began working with two Indigenous Missionaries in India. Along with their dedicated co-workers, they are coordinating pastor training and Disciple Making in over 4000 local churches, and there have been over 1000 new churches established through the HBM India ministry.',
+      'In 2013 Hope Builders began working with two Indigenous Missionaries in India. They are coordinating pastor training and Disciple Making in over 4000 local churches, and over 1000 new churches have been established through the HBM India ministry.',
     sourceNote: 'HBM About',
     stats: [
       { label: 'Began', value: '2013' },

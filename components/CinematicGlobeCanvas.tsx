@@ -58,6 +58,11 @@ interface RingAnim {
   phase: number
 }
 
+const CARD_VERTICAL_BIAS: Partial<Record<string, number>> = {
+  india: 36,
+  'south-africa': 64,
+}
+
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
   africa: {
     s1Cam: { x: -2.9, y: -1.65, z: 8.3 },
@@ -894,8 +899,15 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
   const containerHeight = viewport.height
   const isMobile = containerWidth > 0 && containerWidth < 768
   const desktopCardWidth = Math.min(400, Math.max(340, containerWidth * 0.32 || 380))
-  const desktopCardTop = anchorPos
-    ? Math.min(Math.max(anchorPos.y - 170, 24), Math.max(24, containerHeight - 360))
+  const desktopCardHeight = 476
+  const desktopCardTop = anchorPos && selectedCountry
+    ? Math.min(
+        Math.max(
+          anchorPos.y - 170 - (CARD_VERTICAL_BIAS[selectedCountry.id] ?? 0),
+          24
+        ),
+        Math.max(24, containerHeight - desktopCardHeight - 24)
+      )
     : 96
 
   const desktopCardLeft =
@@ -1028,50 +1040,50 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   }
             }
           >
-            <div className="flex max-h-[min(540px,calc(100vh-6rem))] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
+            <div className="flex min-h-[476px] max-h-[476px] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
               <div
-                className="relative h-40 border-b border-gold/20 bg-cover bg-center"
+                className="relative h-32 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.04) 0%, rgba(7,17,29,0.58) 100%), url(${selectedCountry.image})` }}
               >
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <h3 className="font-heading text-3xl font-bold text-white">
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <h3 className="font-heading text-[30px] font-bold text-white">
                     {selectedCountry.name}
                   </h3>
                 </div>
               </div>
 
-              <div className="min-h-0 space-y-5 overflow-y-auto p-5 md:p-6">
-                <p className="font-body text-sm leading-relaxed text-white/76">
+              <div className="flex min-h-0 flex-1 flex-col gap-4 p-4 md:p-5">
+                <p className="font-body text-[13px] leading-relaxed text-white/76">
                   {selectedCountry.description}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   {selectedCountry.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="flex min-h-[78px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-3"
+                      className="flex min-h-[66px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5"
                     >
-                      <p className="font-body text-[11px] uppercase tracking-[0.16em] text-white/45">
+                      <p className="font-body text-[10px] uppercase tracking-[0.16em] text-white/45">
                         {stat.label}
                       </p>
-                      <p className="mt-1 break-words font-heading text-[15px] leading-snug text-gold md:text-base">
+                      <p className="mt-1 break-words font-heading text-[13px] leading-snug text-gold">
                         {stat.value}
                       </p>
                     </div>
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="mt-auto grid grid-cols-2 gap-3">
                   <a
                     href="/give"
-                    className="inline-flex items-center justify-center rounded-full bg-gold px-5 py-3 font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
+                    className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
                   >
                     Give to {selectedCountry.name}
                   </a>
                   <button
                     type="button"
                     onClick={() => goToMapRef.current()}
-                    className="font-body text-sm font-semibold text-white/72 transition-colors hover:text-white"
+                    className="inline-flex items-center justify-center rounded-full border border-gold/35 bg-white/[0.03] px-4 py-3 text-center font-body text-sm font-semibold text-white/80 transition-colors hover:border-gold/60 hover:text-white"
                   >
                     Back to map
                   </button>
@@ -1087,9 +1099,9 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                 : 'pointer-events-none translate-y-6 opacity-0'
             }`}
           >
-            <div className="flex max-h-[78vh] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/96 shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-md">
+            <div className="flex max-h-[68vh] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/96 shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-md">
               <div
-                className="relative h-32 border-b border-gold/20 bg-cover bg-center"
+                className="relative h-28 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.06) 0%, rgba(7,17,29,0.68) 100%), url(${selectedCountry.image})` }}
               >
                 <div className="absolute inset-x-0 bottom-0 p-4">
@@ -1098,36 +1110,36 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   </h3>
                 </div>
               </div>
-              <div className="min-h-0 space-y-4 overflow-y-auto p-4">
-                <p className="font-body text-sm leading-relaxed text-white/76">
+              <div className="flex min-h-0 flex-1 flex-col gap-3 p-4">
+                <p className="font-body text-[13px] leading-relaxed text-white/76">
                   {selectedCountry.description}
                 </p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   {selectedCountry.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="flex min-h-[72px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-3"
+                      className="flex min-h-[62px] flex-col justify-between rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5"
                     >
-                      <p className="font-body text-[11px] uppercase tracking-[0.16em] text-white/45">
+                      <p className="font-body text-[10px] uppercase tracking-[0.16em] text-white/45">
                         {stat.label}
                       </p>
-                      <p className="mt-1 break-words font-heading text-[14px] leading-snug text-gold">
+                      <p className="mt-1 break-words font-heading text-[12px] leading-snug text-gold">
                         {stat.value}
                       </p>
                     </div>
                   ))}
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="mt-auto grid grid-cols-2 gap-3">
                   <a
                     href="/give"
-                    className="inline-flex items-center justify-center rounded-full bg-gold px-5 py-3 font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
+                    className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
                   >
                     Give to {selectedCountry.name}
                   </a>
                   <button
                     type="button"
                     onClick={() => goToMapRef.current()}
-                    className="font-body text-sm font-semibold text-white/72 transition-colors hover:text-white"
+                    className="inline-flex items-center justify-center rounded-full border border-gold/35 bg-white/[0.03] px-4 py-3 text-center font-body text-sm font-semibold text-white/80 transition-colors hover:border-gold/60 hover:text-white"
                   >
                     Back to map
                   </button>
