@@ -15,7 +15,6 @@ const GOLD_BRIGHT = 0xffdf89
 const GOLD_DIM = 0x7f6231
 const EARTH_URL = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
 const CLOUDS_URL = 'https://unpkg.com/three-globe/example/img/earth-clouds.png'
-const MOON_URL = 'https://unpkg.com/three-globe/example/img/earth-night.jpg'
 const GEOJSON_URL = 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'
 
 let geojsonCache: unknown = null
@@ -201,8 +200,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       radiusMin: number,
       radiusSpread: number,
       brightMin: number,
-      brightSpread: number,
-      layerOpacity: number
+      brightSpread: number
     ) {
       const positions = new Float32Array(count * 3)
       const colors = new Float32Array(count * 3)
@@ -234,17 +232,19 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
             sizeAttenuation: true,
             vertexColors: true,
             transparent: true,
-            opacity: layerOpacity,
+            opacity: 0.95,
             depthWrite: false,
           })
         )
       )
     }
 
-    addStarLayer(2200, 0.34, 46, 30, 0.08, 0.22, 0.56)
-    addStarLayer(420, 0.72, 48, 26, 0.2, 0.24, 0.74)
-    addStarLayer(90, 1.08, 50, 22, 0.42, 0.26, 0.9)
-    addStarLayer(16, 1.42, 52, 18, 0.76, 0.16, 1)
+    addStarLayer(2950, 0.015, 46, 30, 0.08, 0.24)
+    addStarLayer(880, 0.034, 48, 26, 0.18, 0.28)
+    addStarLayer(260, 0.082, 50, 22, 0.4, 0.28)
+    addStarLayer(86, 0.18, 52, 18, 0.7, 0.22)
+    addStarLayer(18, 0.3, 55, 14, 0.9, 0.08)
+    addStarLayer(6, 0.48, 58, 10, 0.96, 0.04)
 
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -279,25 +279,24 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         new THREE.SphereGeometry(GLOBE_RADIUS, 64, 64),
         new THREE.MeshPhongMaterial({
           map: earthTex,
-          specular: new THREE.Color(0x18202a),
-          shininess: 8,
+          specular: new THREE.Color(0x4d5863),
+          shininess: 24,
         })
       )
     )
 
     const cloudTex = textureLoader.load(CLOUDS_URL)
     cloudTex.colorSpace = THREE.SRGBColorSpace
-    cloudTex.anisotropy = renderer.capabilities.getMaxAnisotropy()
     const cloudMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(GLOBE_RADIUS * 1.015, 64, 64),
+      new THREE.SphereGeometry(GLOBE_RADIUS * 1.02, 64, 64),
       new THREE.MeshPhongMaterial({
         map: cloudTex,
         color: 0xffffff,
         transparent: true,
-        opacity: 0.76,
+        opacity: 0.68,
         depthWrite: false,
         side: THREE.DoubleSide,
-        shininess: 6,
+        shininess: 20,
       })
     )
     cloudMesh.renderOrder = 3
@@ -318,14 +317,14 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       varying vec3 vViewDir;
       void main() {
         float rim = 1.0 - clamp(dot(vNormal, vViewDir), 0.0, 1.0);
-        float intensity = pow(rim, 4.8) * 0.38;
+        float intensity = pow(rim, 4.0) * 0.72;
         gl_FragColor = vec4(0.25, 0.55, 1.0, intensity);
       }
     `
 
     globeGroup.add(
       new THREE.Mesh(
-        new THREE.SphereGeometry(GLOBE_RADIUS * 1.09, 32, 32),
+        new THREE.SphereGeometry(GLOBE_RADIUS * 1.14, 32, 32),
         new THREE.ShaderMaterial({
           vertexShader: atmosphereVertex,
           fragmentShader: atmosphereFragment,
@@ -337,25 +336,91 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       )
     )
 
-    scene.add(new THREE.AmbientLight(0x314150, 0.07))
-    const sunLight = new THREE.DirectionalLight(0xffefc6, 2.02)
-    sunLight.position.set(12.5, 9.2, 5.2)
+    scene.add(new THREE.AmbientLight(0x47566a, 0.08))
+    const sunLight = new THREE.DirectionalLight(0xffefc0, 3.25)
+    sunLight.position.set(-10.5, 8.4, 5.8)
     scene.add(sunLight)
 
-    const moonTex = textureLoader.load(MOON_URL)
-    moonTex.colorSpace = THREE.SRGBColorSpace
-    moonTex.anisotropy = renderer.capabilities.getMaxAnisotropy()
-    const moonMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.28, 32, 32),
-      new THREE.MeshPhongMaterial({
-        map: moonTex,
-        color: 0xb9bec7,
-        specular: new THREE.Color(0x08090b),
-        shininess: 4,
+    const sunGlow = new THREE.PointLight(0xffe8a6, 2.4, 48, 2)
+    sunGlow.position.copy(sunLight.position)
+    scene.add(sunGlow)
+
+    const sunCanvas = document.createElement('canvas')
+    sunCanvas.width = sunCanvas.height = 128
+    const sunCtx = sunCanvas.getContext('2d')!
+    const sunGradient = sunCtx.createRadialGradient(64, 64, 0, 64, 64, 64)
+    sunGradient.addColorStop(0, 'rgba(255,250,220,0.95)')
+    sunGradient.addColorStop(0.25, 'rgba(255,230,140,0.55)')
+    sunGradient.addColorStop(1, 'rgba(255,200,80,0)')
+    sunCtx.fillStyle = sunGradient
+    sunCtx.fillRect(0, 0, 128, 128)
+    const sunSprite = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(sunCanvas),
+        blending: THREE.AdditiveBlending,
+        transparent: true,
       })
     )
-    moonMesh.position.set(7.6, 4.8, -8.5)
-    scene.add(moonMesh)
+    sunSprite.scale.set(6.4, 6.4, 1)
+    sunSprite.position.set(-11.2, 8.9, 3.4)
+    scene.add(sunSprite)
+
+    const rayCanvas = document.createElement('canvas')
+    rayCanvas.width = rayCanvas.height = 512
+    const rayCtx = rayCanvas.getContext('2d')!
+    rayCtx.translate(256, 256)
+    for (let i = 0; i < 18; i++) {
+      rayCtx.save()
+      rayCtx.rotate((Math.PI * 2 * i) / 18 + (i % 2) * 0.08)
+      const width = i % 3 === 0 ? 28 : 16
+      const length = i % 4 === 0 ? 250 : 190
+      const gradient = rayCtx.createLinearGradient(0, 0, length, 0)
+      gradient.addColorStop(0, 'rgba(255,244,210,0.18)')
+      gradient.addColorStop(0.32, 'rgba(255,223,145,0.09)')
+      gradient.addColorStop(1, 'rgba(255,223,145,0)')
+      rayCtx.fillStyle = gradient
+      rayCtx.beginPath()
+      rayCtx.moveTo(0, 0)
+      rayCtx.lineTo(length, width / 2)
+      rayCtx.lineTo(length, -width / 2)
+      rayCtx.closePath()
+      rayCtx.fill()
+      rayCtx.restore()
+    }
+    const sunRays = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(rayCanvas),
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        opacity: 0.8,
+        depthWrite: false,
+      })
+    )
+    sunRays.scale.set(22, 22, 1)
+    sunRays.position.set(-13.4, 10.9, 2.7)
+    scene.add(sunRays)
+
+    const haloCanvas = document.createElement('canvas')
+    haloCanvas.width = haloCanvas.height = 256
+    const haloCtx = haloCanvas.getContext('2d')!
+    const haloGradient = haloCtx.createRadialGradient(128, 128, 0, 128, 128, 128)
+    haloGradient.addColorStop(0, 'rgba(255,245,215,0.45)')
+    haloGradient.addColorStop(0.3, 'rgba(255,220,130,0.18)')
+    haloGradient.addColorStop(1, 'rgba(255,220,130,0)')
+    haloCtx.fillStyle = haloGradient
+    haloCtx.fillRect(0, 0, 256, 256)
+    const haloSprite = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(haloCanvas),
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false,
+      })
+    )
+    haloSprite.scale.set(11, 11, 1)
+    haloSprite.position.set(-11.9, 9.6, 3.2)
+    scene.add(haloSprite)
 
     function animateCountryStyle(selectedId: string | null) {
       countryRenders.forEach((render) => {
