@@ -59,12 +59,12 @@ interface RingAnim {
 }
 
 const CARD_VERTICAL_BIAS: Partial<Record<string, number>> = {
-  kenya: 30,
-  malawi: 18,
-  tanzania: 28,
-  india: 36,
-  'south-africa': 64,
-  zimbabwe: 18,
+  kenya: 52,
+  malawi: 34,
+  tanzania: 48,
+  india: 44,
+  'south-africa': 82,
+  zimbabwe: 34,
 }
 
 const CFG: Record<'africa' | 'asia', RegionCfg> = {
@@ -903,11 +903,11 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
   const containerHeight = viewport.height
   const isMobile = containerWidth > 0 && containerWidth < 768
   const desktopCardWidth = Math.min(400, Math.max(340, containerWidth * 0.32 || 380))
-  const desktopCardHeight = 484
+  const desktopCardHeight = 492
   const desktopCardTop = anchorPos && selectedCountry
     ? Math.min(
         Math.max(
-          anchorPos.y - 170 - (CARD_VERTICAL_BIAS[selectedCountry.id] ?? 0),
+          anchorPos.y - 186 - (CARD_VERTICAL_BIAS[selectedCountry.id] ?? 0),
           24
         ),
         Math.max(24, containerHeight - desktopCardHeight - 24)
@@ -1044,20 +1044,20 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   }
             }
           >
-            <div className="flex min-h-[484px] max-h-[484px] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
+            <div className="flex min-h-[492px] max-h-[492px] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
               <div
-                className="relative h-32 border-b border-gold/20 bg-cover bg-center"
+                className="relative h-28 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.04) 0%, rgba(7,17,29,0.58) 100%), url(${selectedCountry.image})` }}
               >
                 <div className="absolute inset-x-0 bottom-0 p-4">
-                  <h3 className="font-heading text-[30px] font-bold text-white">
+                  <h3 className="font-heading text-[28px] font-bold text-white">
                     {selectedCountry.name}
                   </h3>
                 </div>
               </div>
 
-              <div className="flex min-h-0 flex-1 flex-col gap-4 p-4 md:p-5">
-                <p className="font-body text-[13px] leading-relaxed text-white/76">
+              <div className="flex min-h-0 flex-1 flex-col gap-3.5 p-4 md:p-5">
+                <p className="font-body text-[12.5px] leading-relaxed text-white/76">
                   {selectedCountry.description}
                 </p>
 
@@ -1077,7 +1077,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   ))}
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-3 pt-3 pb-1">
+                <div className="mt-auto grid grid-cols-2 gap-3 pt-4 pb-2">
                   <a
                     href="/give"
                     className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
@@ -1103,9 +1103,9 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                 : 'pointer-events-none translate-y-6 opacity-0'
             }`}
           >
-            <div className="flex max-h-[68vh] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/96 shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-md">
+            <div className="flex max-h-[72vh] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/96 shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-md">
               <div
-                className="relative h-28 border-b border-gold/20 bg-cover bg-center"
+                className="relative h-24 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.06) 0%, rgba(7,17,29,0.68) 100%), url(${selectedCountry.image})` }}
               >
                 <div className="absolute inset-x-0 bottom-0 p-4">
@@ -1115,7 +1115,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                 </div>
               </div>
               <div className="flex min-h-0 flex-1 flex-col gap-3 p-4">
-                <p className="font-body text-[13px] leading-relaxed text-white/76">
+                <p className="font-body text-[12.5px] leading-relaxed text-white/76">
                   {selectedCountry.description}
                 </p>
                 <div className="grid grid-cols-2 gap-2.5">
@@ -1133,7 +1133,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                     </div>
                   ))}
                 </div>
-                <div className="mt-auto grid grid-cols-2 gap-3 pt-3 pb-1">
+                <div className="mt-auto grid grid-cols-2 gap-3 pt-4 pb-2">
                   <a
                     href="/give"
                     className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"

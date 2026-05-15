@@ -39,7 +39,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 35.5,
     image: 'https://picsum.photos/seed/hbm-stage3-mozambique/900/520',
     description:
-      'Project Timothy was begun to address the acute shortage of pastors in Mozambique. Hope Builders Ministries equips indigenous leaders with training and resources and then partners with them for the work of ministry in their communities.',
+      'Project Timothy began to address the acute shortage of pastors in Mozambique. Hope Builders equips indigenous leaders with training and resources, then partners with them for ministry in their communities.',
     sourceNote: 'HBM About + Our Story',
     stats: [
       { label: 'Origin', value: 'Project Timothy' },
@@ -73,7 +73,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 27.8,
     image: 'https://picsum.photos/seed/hbm-stage3-zambia/900/520',
     description:
-      'A clearer understanding of the Word of God is needed in Zambia. Hope Builders Ministries trains pastors and churches to make disciples who understand that the “grace of God” in Christ Jesus for eternal life is a free gift.',
+      'A clearer understanding of the Word of God is needed in Zambia. Hope Builders trains pastors and churches to make disciples who understand that the grace of God in Christ Jesus for eternal life is a free gift.',
     sourceNote: 'HBM Africa / Zambia',
     stats: [
       { label: 'Need', value: 'Clearer understanding of the Word of God' },
@@ -124,7 +124,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 32.2,
     image: 'https://picsum.photos/seed/hbm-stage3-uganda/900/520',
     description:
-      'HBM brings the power of Jesus Christ to Indigenous communities through disciple making. Hope Builders continues to encourage the church through on going partnerships as they work to fulfill the Great Commission.',
+      'HBM brings the power of Jesus Christ to Indigenous communities through disciple making. Hope Builders continues to encourage the church through on going partnerships as they fulfill the Great Commission.',
     sourceNote: 'HBM Three Es',
     stats: [
       { label: 'Approach', value: 'Disciple making' },
@@ -175,7 +175,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 69.3,
     image: 'https://picsum.photos/seed/hbm-stage3-pakistan/900/520',
     description:
-      'HBM is also training indigenous missionaries in Pakistan. Working with the Indigenous Church in Africa and Asia, Hope Builders Ministries equips indigenous leaders with training and resources and then partners with them for the work of ministry in their communities.',
+      'HBM is also training indigenous missionaries in Pakistan. Working with the Indigenous Church in Africa and Asia, Hope Builders equips indigenous leaders with training and resources, then partners with them for ministry in their communities.',
     sourceNote: 'HBM About',
     stats: [
       { label: 'Training', value: 'Indigenous missionaries' },
@@ -192,7 +192,7 @@ export const COUNTRY_IMPACTS: CountryImpact[] = [
     lng: 90.3,
     image: 'https://picsum.photos/seed/hbm-stage3-bangladesh/900/520',
     description:
-      'HBM is also training indigenous missionaries in Bangladesh. Hope Builders continues to encourage the church through on going partnerships as they work to fulfill the Great Commission and make disciples in their communities and beyond.',
+      'HBM is also training indigenous missionaries in Bangladesh. Hope Builders encourages the church through on going partnerships as they fulfill the Great Commission and make disciples in their communities and beyond.',
     sourceNote: 'HBM About + Three Es + Our Story',
     stats: [
       { label: 'Training', value: 'Indigenous missionaries' },
