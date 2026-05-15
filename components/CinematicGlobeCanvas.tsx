@@ -58,6 +58,8 @@ interface RingAnim {
   phase: number
 }
 
+type ClickTargetType = 'dot' | 'ring' | 'hit' | 'border'
+
 const CARD_VERTICAL_BIAS: Partial<Record<string, number>> = {
   kenya: 52,
   malawi: 34,
@@ -86,7 +88,7 @@ const CFG: Record<'africa' | 'asia', RegionCfg> = {
   },
   asia: {
     s1Cam: { x: -3.0, y: -1.45, z: 8.35 },
-    s1Rot: { x: 0.18, y: lngToRotY(124) - 0.03 },
+    s1Rot: { x: 0.18, y: lngToRotY(131) - 0.03 },
     s2: { cam: { x: -0.03, y: 0.02, z: 3.52 }, rotX: 0.34, rotY: lngToRotY(79.2) },
     countries: ['India', 'Pakistan', 'Bangladesh'],
   },
@@ -114,6 +116,18 @@ function projectCountryToScreen(
     x: ((worldPoint.x + 1) / 2) * container.clientWidth,
     y: ((-worldPoint.y + 1) / 2) * container.clientHeight,
   }
+}
+
+function countryFacingCamera(
+  country: CountryImpact,
+  globeGroup: THREE.Group,
+  camera: THREE.PerspectiveCamera
+) {
+  const worldPoint = latLngToVec3(country.lat, country.lng, GLOBE_RADIUS + 0.03)
+  globeGroup.localToWorld(worldPoint)
+  const globeNormal = worldPoint.clone().normalize()
+  const cameraNormal = camera.position.clone().normalize()
+  return globeNormal.dot(cameraNormal) > 0.12
 }
 
 export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasProps) {
@@ -225,11 +239,12 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       )
     }
 
-    addStarLayer(3600, 0.016, 46, 30, 0.1, 0.28)
-    addStarLayer(1350, 0.038, 48, 26, 0.22, 0.35)
-    addStarLayer(520, 0.074, 50, 22, 0.42, 0.34)
-    addStarLayer(160, 0.13, 52, 18, 0.72, 0.24)
-    addStarLayer(28, 0.22, 55, 14, 0.92, 0.08)
+    addStarLayer(2950, 0.015, 46, 30, 0.08, 0.24)
+    addStarLayer(880, 0.034, 48, 26, 0.18, 0.28)
+    addStarLayer(260, 0.082, 50, 22, 0.4, 0.28)
+    addStarLayer(86, 0.18, 52, 18, 0.7, 0.22)
+    addStarLayer(18, 0.3, 55, 14, 0.9, 0.08)
+    addStarLayer(6, 0.48, 58, 10, 0.96, 0.04)
 
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -278,10 +293,10 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         map: cloudTex,
         color: 0xffffff,
         transparent: true,
-        opacity: 0.58,
+        opacity: 0.68,
         depthWrite: false,
         side: THREE.DoubleSide,
-        shininess: 14,
+        shininess: 20,
       })
     )
     cloudMesh.renderOrder = 3
@@ -411,11 +426,11 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       countryRenders.forEach((render) => {
         const selected = selectedId === render.id
         const dimmed = Boolean(selectedId) && !selected
-        const lineOpacity = selected ? 1 : dimmed ? 0.22 : 0.88
+        const lineOpacity = selected ? 1 : dimmed ? 0.3 : 0.96
         const dotOpacity = selected ? 1 : dimmed ? 0.35 : 1
-        const ringOpacity = selected ? 0.95 : dimmed ? 0.12 : 0.42
-        const dotScale = selected ? 1.45 : 1
-        const ringScale = selected ? 1.28 : 1
+        const ringOpacity = selected ? 0.98 : dimmed ? 0.16 : 0.5
+        const dotScale = selected ? 1.52 : 1
+        const ringScale = selected ? 1.34 : 1
 
         render.lineMaterials.forEach((material) => {
           gsap.to(material, { opacity: lineOpacity, duration: 0.4, overwrite: true })
@@ -476,6 +491,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         )
         dotMesh.position.copy(position)
         dotMesh.userData.countryId = country.id
+        dotMesh.userData.hitType = 'dot' as ClickTargetType
 
         const ringMesh = new THREE.Mesh(
           new THREE.RingGeometry(0.028, 0.048, 28),
@@ -484,13 +500,15 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
         ringMesh.position.copy(normal.clone().multiplyScalar(GLOBE_RADIUS + 0.006))
         ringMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal)
         ringMesh.userData.countryId = country.id
+        ringMesh.userData.hitType = 'ring' as ClickTargetType
 
         const hitMesh = new THREE.Mesh(
-          new THREE.SphereGeometry(0.11, 10, 10),
+          new THREE.SphereGeometry(0.088, 10, 10),
           new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
         )
         hitMesh.position.copy(normal.clone().multiplyScalar(GLOBE_RADIUS + 0.03))
         hitMesh.userData.countryId = country.id
+        hitMesh.userData.hitType = 'hit' as ClickTargetType
 
         group.add(dotMesh)
         group.add(ringMesh)
@@ -535,7 +553,7 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
 
         for (const ring of rings) {
           const points = (ring as [number, number][]).map(([lng, lat]) =>
-            latLngToVec3(lat, lng, GLOBE_RADIUS * 1.002)
+            latLngToVec3(lat, lng, GLOBE_RADIUS * 1.006)
           )
 
           if (points.length < 2) continue
@@ -544,13 +562,15 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
           const lineMaterial = new THREE.LineBasicMaterial({
             color: GOLD,
             transparent: true,
-            opacity: 0.88,
+            opacity: 0.96,
+            depthWrite: false,
           })
           const line = new THREE.Line(
             new THREE.BufferGeometry().setFromPoints(points),
             lineMaterial
           )
           line.userData.countryId = country.id
+          line.userData.hitType = 'border' as ClickTargetType
           group.add(line)
           clickableObjects.push(line)
           render.lineMaterials.push(lineMaterial)
@@ -590,11 +610,42 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       const host = container
       if (!host) return null
       const rect = host.getBoundingClientRect()
+      const localX = clientX - rect.left
+      const localY = clientY - rect.top
+
+      let nearestCountryId: string | null = null
+      let nearestDistance = Number.POSITIVE_INFINITY
+      const threshold = Math.min(host.clientWidth < 768 ? 58 : 44, host.clientWidth * 0.12)
+
+      for (const country of regionCountries) {
+        if (!countryFacingCamera(country, globeGroup, camera)) continue
+        const projected = projectCountryToScreen(country, globeGroup, camera, host)
+        const distance = Math.hypot(projected.x - localX, projected.y - localY)
+        if (distance < threshold && distance < nearestDistance) {
+          nearestDistance = distance
+          nearestCountryId = country.id
+        }
+      }
+
+      if (nearestCountryId) return nearestCountryId
+
       pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1
       pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(pointer, camera)
 
       const hits = raycaster.intersectObjects(clickableObjects, false)
+      const hitPriority: Record<ClickTargetType, number> = {
+        hit: 0,
+        dot: 1,
+        ring: 2,
+        border: 3,
+      }
+      hits.sort((a, b) => {
+        const aType = (a.object.userData.hitType as ClickTargetType | undefined) ?? 'border'
+        const bType = (b.object.userData.hitType as ClickTargetType | undefined) ?? 'border'
+        const priorityDelta = hitPriority[aType] - hitPriority[bType]
+        return priorityDelta !== 0 ? priorityDelta : a.distance - b.distance
+      })
       for (const hit of hits) {
         const countryId = hit.object.userData.countryId as string | undefined
         if (countryId) return countryId
@@ -846,11 +897,11 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
       frameRef.current = requestAnimationFrame(animate)
       const elapsed = clock.getElapsedTime()
 
-      cloudMesh.rotation.y += 0.00072
+      cloudMesh.rotation.y += 0.00108
 
       if (currentStage === 'space') {
-        globeGroup.rotation.x = cfg.s1Rot.x + Math.sin(elapsed * 0.09) * 0.018
-        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(elapsed * 0.12) * 0.022
+        globeGroup.rotation.x = cfg.s1Rot.x + Math.sin(elapsed * 0.14) * 0.02
+        globeGroup.rotation.y = cfg.s1Rot.y + Math.sin(elapsed * 0.18) * 0.028
       }
 
       ringAnimsRef.current.forEach(({ id, mesh, phase }) => {
@@ -903,7 +954,8 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
   const containerHeight = viewport.height
   const isMobile = containerWidth > 0 && containerWidth < 768
   const desktopCardWidth = Math.min(400, Math.max(340, containerWidth * 0.32 || 380))
-  const desktopCardHeight = 492
+  const kenyaCardBonus = selectedCountry?.id === 'kenya' ? 22 : 0
+  const desktopCardHeight = 492 + kenyaCardBonus
   const desktopCardTop = anchorPos && selectedCountry
     ? Math.min(
         Math.max(
@@ -1044,7 +1096,10 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   }
             }
           >
-            <div className="flex min-h-[492px] max-h-[492px] flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
+            <div
+              className="flex flex-col overflow-hidden rounded-[22px] border border-gold/40 bg-[#07111d]/94 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-md"
+              style={{ minHeight: desktopCardHeight, maxHeight: desktopCardHeight }}
+            >
               <div
                 className="relative h-28 border-b border-gold/20 bg-cover bg-center"
                 style={{ backgroundImage: `linear-gradient(180deg, rgba(7,17,29,0.04) 0%, rgba(7,17,29,0.58) 100%), url(${selectedCountry.image})` }}
@@ -1077,7 +1132,10 @@ export default function CinematicGlobeCanvas({ region }: CinematicGlobeCanvasPro
                   ))}
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-3 pt-4 pb-2">
+                <div
+                  className="mt-auto grid grid-cols-2 gap-3 pt-4 pb-2"
+                  style={{ paddingBottom: selectedCountry.id === 'kenya' ? '1.25rem' : undefined }}
+                >
                   <a
                     href="/give"
                     className="inline-flex items-center justify-center rounded-full bg-gold px-4 py-3 text-center font-body text-sm font-semibold text-navy transition-colors hover:bg-gold/90"
